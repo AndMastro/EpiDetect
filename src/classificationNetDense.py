@@ -17,7 +17,7 @@ from sklearn.utils import class_weight
 from sklearn.model_selection import train_test_split
 
 PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/"
-DATASET_NAME = "additive2.p" #1 is MAF=0.2 and 2 is MAF=0.5 ---- it should make sense now. Prevalence should reflect #controls. Am I right?
+DATASET_NAME = "prova.p" #1 is MAF=0.2 and 2 is MAF=0.5 ---- it should make sense now. Prevalence should reflect #controls. Am I right?
 PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME
 
 ########################################
@@ -25,9 +25,9 @@ PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME
 
 dataset = {}
 EPOCHS = 20
-LEARNING_RATE = 0.005
+LEARNING_RATE = 1e-4
 BATCH_SIZE = 64
-INPUT_SIZE = 256*3
+INPUT_SIZE = 100*3
 numLayers = sys.argv[1]
 
 
@@ -115,7 +115,9 @@ if __name__ == "__main__":
     print("Loading dataset...")
 
     for ind in tqdm(dataset):
+        #xGeno = [1,0,0]*256
         xGeno = dataset[ind][0]  # one-hot encoding for the SNPs
+        #xGeno += dataset[ind][762:]
         trainX.append(xGeno)
         label = dataset[ind][1]  # this is int, does it want float?
         trainY.append(label)
@@ -168,7 +170,7 @@ if __name__ == "__main__":
 
     # define early stopping callback
     es = keras.callbacks.EarlyStopping(
-        monitor='val_acc', mode='max', verbose=1, patience=10)
+        monitor='val_acc', mode='max', verbose=1, patience=5)
 
     # set class weights in order to work with unbalanced data. We keep thus statistical power
     '''print("Computing class weigth to work with unbalanced data...")

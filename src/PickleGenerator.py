@@ -13,9 +13,9 @@ from tqdm import tqdm
 
 
 DATASET_DIR_PATH = "../data/largeFiles/datasets/synthetic/"
-DATASET_NAME = "additive_risk_model_MAF05_eta01_theta2_EDM-1/additive_risk_model_MAF05_eta01_theta2_EDM-1_01.txt"
+DATASET_NAME = "prova_EDM-1/prova_EDM-1_1.txt"
 DATASET_PATH = DATASET_DIR_PATH + DATASET_NAME
-PICKLE_PATH = "../data/largeFiles/datasets/pickles/additive2.p"
+PICKLE_PATH = "../data/largeFiles/datasets/pickles/prova.p"
 
 
 '''this function is emplyed to generate pickles with the format one-hot
