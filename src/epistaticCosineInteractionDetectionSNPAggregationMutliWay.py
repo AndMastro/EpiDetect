@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 INPUT_SIZE = 256*3  # 804 SBP, 1026 DBP, 849 PP
-
+DATASET_NAME = "additive_risk_model_MAF02_eta01_theta2_EDM-1_10"
 if __name__ == "__main__":
 
     trueData = False  # variable stating if using true or generated data
@@ -36,13 +36,13 @@ if __name__ == "__main__":
     sbpSNPs = None
 
     layerWeights0 = np.load(
-        '..\\data\\weights\\layer_0_weights_threshold1_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights1 = np.load(
-        '..\\data\\weights\\layer_1_weights_threshold1_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights2 = np.load(
-        '..\\data\\weights\\layer_2_weights_threshold1_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights3 = np.load(
-        '..\\data\\weights\\layer_3_weights_threshold1_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
 
     print("Loading SNPs database...")
 
@@ -306,7 +306,7 @@ if __name__ == "__main__":
         counter = 0
         fileName = "..\\data\\results\\epistaticInteraction\\synthetic\\" + \
             str(interactionWay) + \
-            "\\epistaticInteractions_thesisMethodandMinVecSum_threshold1_run{}.txt"
+            "\\epistaticInteractions_thesisMethodandMinVecSum_" + DATASET_NAME + "_run{}.txt"
         while os.path.isfile(fileName.format(counter)):
             counter += 1
         fileName = fileName.format(counter)
