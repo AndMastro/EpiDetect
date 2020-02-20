@@ -17,8 +17,9 @@ from sklearn.utils import class_weight
 from sklearn.model_selection import train_test_split
 
 PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/"
-DATASET_NAME = "prova.p" #1 is MAF=0.2 and 2 is MAF=0.5 ---- it should make sense now. Prevalence should reflect #controls. Am I right?
-PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME
+DATASET_NAME = "threshold1.p" #1 is MAF=0.2 and 2 is MAF=0.5 ---- it should make sense now. Prevalence should reflect #controls. Am I right?
+PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME 
+###RENDER DATASET INPUTABLE. IT should be more modular###
 
 ########################################
 # arguments in input: numLayers (2 or 4)
@@ -27,7 +28,7 @@ dataset = {}
 EPOCHS = 20
 LEARNING_RATE = 1e-4
 BATCH_SIZE = 64
-INPUT_SIZE = 100*3
+INPUT_SIZE = 256*3
 numLayers = sys.argv[1]
 
 
@@ -211,26 +212,26 @@ if __name__ == "__main__":
 
     if save:
         if numLayers == '4':
-            np.save('..\\data\\weights\\layer_0_weights_additive1_numLayers' + numLayers,
+            np.save('..\\data\\weights\\layer_0_weights_threshold1_numLayers' + numLayers,
                     weightsLayer0, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\layer_1_weights_additive1_numLayers' + numLayers,
+            np.save('..\\data\\weights\\layer_1_weights_threshold1_numLayers' + numLayers,
                     weightsLayer1, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\layer_2_weights_additive1_numLayers' + numLayers,
+            np.save('..\\data\\weights\\layer_2_weights_threshold1_numLayers' + numLayers,
                     weightsLayer2, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\layer_3_weights_additive1_numLayers' + numLayers,
+            np.save('..\\data\\weights\\layer_3_weights_threshold1_numLayers' + numLayers,
                     weightsLayer3, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\layer_4_weights_additive1_numLayers' + numLayers,
+            np.save('..\\data\\weights\\layer_4_weights_threshold1_numLayers' + numLayers,
                     weightsLayer4, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\layer_5_weights_additive1_numLayers' + numLayers,
+            np.save('..\\data\\weights\\layer_5_weights_threshold1_numLayers' + numLayers,
                     weightsLayer5, allow_pickle=True, fix_imports=True)
         else:
-            np.save('..\\data\\weights\\layer_0_weights_additive1_numLayers' + numLayers,
+            np.save('..\\data\\weights\\layer_0_weights_threshold1_numLayers' + numLayers,
                     weightsLayer0, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\layer_1_weights_additive1_numLayers' + numLayers,
+            np.save('..\\data\\weights\\layer_1_weights_threshold1_numLayers' + numLayers,
                     weightsLayer1, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\layer_2_weights_additive1_numLayers' + numLayers,
+            np.save('..\\data\\weights\\layer_2_weights_threshold1_numLayers' + numLayers,
                     weightsLayer2, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\layer_3_weights_additive1_numLayers' + numLayers,
+            np.save('..\\data\\weights\\layer_3_weights_threshold1_numLayers' + numLayers,
                     weightsLayer3, allow_pickle=True, fix_imports=True)
 
         print("Weights saved")

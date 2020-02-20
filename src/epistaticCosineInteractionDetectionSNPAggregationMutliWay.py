@@ -13,7 +13,7 @@ from operator import add
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-INPUT_SIZE = 300  # 804 SBP, 1026 DBP, 849 PP
+INPUT_SIZE = 256*3  # 804 SBP, 1026 DBP, 849 PP
 
 if __name__ == "__main__":
 
@@ -36,18 +36,18 @@ if __name__ == "__main__":
     sbpSNPs = None
 
     layerWeights0 = np.load(
-        '..\\data\\weights\\layer_0_weights_unknown_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_0_weights_threshold1_numLayers2.npy', allow_pickle=True)
     layerWeights1 = np.load(
-        '..\\data\\weights\\layer_1_weights_unknown_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_1_weights_threshold1_numLayers2.npy', allow_pickle=True)
     layerWeights2 = np.load(
-        '..\\data\\weights\\layer_2_weights_unknown_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_2_weights_threshold1_numLayers2.npy', allow_pickle=True)
     layerWeights3 = np.load(
-        '..\\data\\weights\\layer_3_weights_unknown_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_3_weights_threshold1_numLayers2.npy', allow_pickle=True)
 
     print("Loading SNPs database...")
 
     sbpSNPs = snpRead(
-        "..\\data\\snpListUnknown.bim")
+        "..\\data\\snpList256.bim")
 
     dense1 = layerWeights0[0]
     dense2 = layerWeights1[0]
@@ -306,7 +306,7 @@ if __name__ == "__main__":
         counter = 0
         fileName = "..\\data\\results\\epistaticInteraction\\synthetic\\" + \
             str(interactionWay) + \
-            "\\epistaticInteractions_thesisMethodandMinVecSum_unknown_run{}.txt"
+            "\\epistaticInteractions_thesisMethodandMinVecSum_threshold1_run{}.txt"
         while os.path.isfile(fileName.format(counter)):
             counter += 1
         fileName = fileName.format(counter)
