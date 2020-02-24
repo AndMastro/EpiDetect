@@ -17,7 +17,7 @@ from sklearn.utils import class_weight
 from sklearn.model_selection import train_test_split
 
 PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/"
-DATASET_NAME = "epistatic_risk_model_MAF02_eta01_theta2_EDM-1_10" #1 is MAF=0.2 and 2 is MAF=0.5 ---- it should make sense now. Prevalence should reflect #controls. Am I right?
+DATASET_NAME = "epistatic_risk_model_MAF01_eta01_theta05_EDM-1_10" #1 is MAF=0.2 and 2 is MAF=0.5 ---- it should make sense now. Prevalence should reflect #controls. Am I right?
 PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME + ".p"
 ###RENDER DATASET INPUTABLE. IT should be more modular###
 
@@ -25,7 +25,7 @@ PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME + ".p"
 # arguments in input: numLayers (2 or 4)
 
 dataset = {}
-EPOCHS = 20
+EPOCHS = 30
 LEARNING_RATE = 1e-4
 BATCH_SIZE = 64
 INPUT_SIZE = 256*3

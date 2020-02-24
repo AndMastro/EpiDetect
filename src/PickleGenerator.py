@@ -14,12 +14,12 @@ from os.path import isfile, join
 
 
 
-DATASET_DIR_PATH = "../data/largeFiles/datasets/synthetic/epistatic_risk_model_MAF02_eta01_theta2_EDM-1/"
+DATASET_DIR_PATH = "../data/largeFiles/datasets/synthetic/epistatic_risk_model_MAF01_eta01_theta05_EDM-1/"
 PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/"
 
 
 
-'''this function is emplyed to generate pickles with the format one-hot
+'''this function is employed to generate pickles with the format one-hot
     from datasetas created  using GAMETES. We keep the predictive SNPs as the lst two ones, since
     our MLP does not care about order. If using a different architecture, this should be revised.'''
 
