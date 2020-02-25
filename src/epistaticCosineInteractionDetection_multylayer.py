@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 INPUT_SIZE = 256*3  # 804 SBP, 1026 DBP, 849 PP
-DATASET_NAME = "threshold_risk_model_MAF01_eta01_theta0.5_EDM-1_10"
+DATASET_NAME = "threshold_risk_model_MAF01_eta01_theta0.5_EDM-1_03"
 if __name__ == "__main__":
 
     trueData = False  # variable stating if using true or generated data
@@ -29,29 +29,56 @@ if __name__ == "__main__":
 
     interactionWay = int(sys.argv[2])
 
+    numLayers = int(sys.argv[3])
+
     layerWeights0 = None
     layerWeights1 = None
     layerWeights2 = None
     layerWeights3 = None
+    layerWeights4 = None
+    layerWeights5 = None
     sbpSNPs = None
 
     layerWeights0 = np.load(
-        '..\\data\\weights\\layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_0_weights_' + DATASET_NAME + '_numLayers' + str(numLayers) + '.npy', allow_pickle=True)
     layerWeights1 = np.load(
-        '..\\data\\weights\\layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_1_weights_' + DATASET_NAME + '_numLayers' + str(numLayers) + '.npy', allow_pickle=True)
     layerWeights2 = np.load(
-        '..\\data\\weights\\layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_2_weights_' + DATASET_NAME + '_numLayers' + str(numLayers) + '.npy', allow_pickle=True)
     layerWeights3 = np.load(
-        '..\\data\\weights\\layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\layer_3_weights_' + DATASET_NAME + '_numLayers' + str(numLayers) + '.npy', allow_pickle=True)
+
+    if numLayers == 4:
+        layerWeights4 = np.load(
+            '..\\data\\weights\\layer_4_weights_' + DATASET_NAME + '_numLayers' + str(numLayers) + '.npy', allow_pickle=True)
+        layerWeights5 = np.load(
+            '..\\data\\weights\\layer_5_weights_' + DATASET_NAME + '_numLayers' + str(numLayers) + '.npy', allow_pickle=True)
 
     print("Loading SNPs database...")
 
     sbpSNPs = snpRead(
         "..\\data\\snpList256.bim")
 
-    dense1 = layerWeights0[0]
-    dense2 = layerWeights1[0]
-    output = layerWeights3[0]
+    dense1 = None
+    dense2 = None
+    dense3 = None
+    dense4 = None
+    output = None
+
+    if numLayers == 4:
+        dense1 = layerWeights0[0]
+        dense2 = layerWeights1[0]
+        dense3 = layerWeights2[0]
+        dense4 = layerWeights3[0]
+        #layerWeright4 is dropout (empty)
+        output = layerWeights5[0]
+    else:
+        dense1 = layerWeights0[0]
+        dense2 = layerWeights1[0]
+        #layerWeright2 is dropout (empty)
+        output = layerWeights3[0]
+
+    print("===========================")
 
     print("Done!")
     print("===========================")
@@ -79,6 +106,29 @@ if __name__ == "__main__":
                 dense2Weights[i].append(abs(inputVec[i]))
         firstAppend = False
 
+    if numLayers == 4:
+        dense3Weights = []
+        firstAppend = True
+
+        for inputVec in dense3:
+            for i in range(len(inputVec)):
+                if firstAppend:
+                    dense3Weights.append([abs(inputVec[i])])
+                else:
+                    dense3Weights[i].append(abs(inputVec[i]))
+            firstAppend = False
+
+        dense4Weights = []
+        firstAppend = True
+
+        for inputVec in dense4:
+            for i in range(len(inputVec)):
+                if firstAppend:
+                    dense4Weights.append([abs(inputVec[i])])
+                else:
+                    dense4Weights[i].append(abs(inputVec[i]))
+            firstAppend = False
+
     outputWeights = []
     for w in output:
         outputWeights.append((list(abs(w))))
@@ -89,8 +139,18 @@ if __name__ == "__main__":
 
     print("Defining Aggregated Weight for any unit...")
 
-    aggregateWeightsD1 = np.matmul(
-        np.array(outputWeights), np.array(dense2Weights))
+    aggregateWeightsD1 = None
+
+    if numLayers == 4:
+        aggregateWeightsD1 = np.matmul(
+            np.array(outputWeights), np.array(dense4Weights))
+        aggregateWeightsD1 = np.matmul(
+            aggregateWeightsD1, np.array(dense3Weights))
+        aggregateWeightsD1 = np.matmul(
+            aggregateWeightsD1, np.array(dense2Weights))
+    else:
+        aggregateWeightsD1 = np.matmul(
+            np.array(outputWeights), np.array(dense2Weights))
 
     print("Done.")
 
@@ -210,7 +270,8 @@ if __name__ == "__main__":
             '''interactions[intGroup] = pairwise.cosine_similarity(
                 (snpsDict[intGroup[0]][1]).reshape(1, -1), snpsDict[intGroup[1]][1].reshape(1, -1))'''
             # considering also min
-            interactions[intGroup] = minVecComputation[intGroup]*pairwise.cosine_similarity((snpsDict[intGroup[0]][1]).reshape(1,-1), snpsDict[intGroup[1]][1].reshape(1,-1))
+            interactions[intGroup] = minVecComputation[intGroup]*pairwise.cosine_similarity(
+                (snpsDict[intGroup[0]][1]).reshape(1, -1), snpsDict[intGroup[1]][1].reshape(1, -1))
 
     # interaction detection only > 2 way interaction (generalized cosine similarity for n vectors)
     if interactionWay > 2:
@@ -284,7 +345,6 @@ if __name__ == "__main__":
 
     interactingSNPs = []
 
-    
     if interactionWay == 2:
         for pair in intRank:
             interactingSNPs.append(
@@ -326,7 +386,7 @@ if __name__ == "__main__":
 
     interValues = []
     for val in interactingSNPs:
-            interValues.append((val[0].tolist())[0][0])
+        interValues.append((val[0].tolist())[0][0])
 
     plt.hist(interValues)
 
@@ -339,8 +399,8 @@ if __name__ == "__main__":
 
     sys.exit()
 
-        ################################################################################
-        ################################################################################
-        ##################              FILE ENDS HERE            ######################
-        ################################################################################
-        ################################################################################
+    ################################################################################
+    ################################################################################
+    ##################              FILE ENDS HERE            ######################
+    ################################################################################
+    ################################################################################
