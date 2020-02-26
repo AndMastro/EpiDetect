@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 INPUT_SIZE = 256*3  # 804 SBP, 1026 DBP, 849 PP
-DATASET_NAME = "threshold_risk_model_MAF01_eta01_theta0.5_EDM-1_03"
+DATASET_NAME = "threshold_risk_model_MAF01_eta01_theta0.5_EDM-1_08"
 if __name__ == "__main__":
 
     trueData = False  # variable stating if using true or generated data
