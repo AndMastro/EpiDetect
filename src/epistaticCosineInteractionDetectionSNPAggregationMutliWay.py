@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 INPUT_SIZE = 256*3  # 804 SBP, 1026 DBP, 849 PP
-DATASET_NAME = "threshold_risk_model_MAF01_eta01_theta0.5_EDM-1_10"
+DATASET_NAME = "unknown_risk_model_MAF03_her08_prev05_3SNP_EDM-1_1"
 if __name__ == "__main__":
 
     trueData = False  # variable stating if using true or generated data
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     print("Loading SNPs database...")
 
     sbpSNPs = snpRead(
-        "..\\data\\snpList256.bim")
+        "..\\data\\snpList256_3SNP.bim")
 
     dense1 = layerWeights0[0]
     dense2 = layerWeights1[0]
@@ -215,8 +215,9 @@ if __name__ == "__main__":
     # interaction detection only > 2 way interaction (generalized cosine similarity for n vectors)
     if interactionWay > 2:
 
-        #minVecComputation = {}
+        minVecComputation = {}
 
+        #uncomment of big useless computational overhead
         '''for group in potentialInteractions:
             minVecComputation[group] = []'''
 
@@ -225,14 +226,14 @@ if __name__ == "__main__":
         # in order to exploit FUTURE (deeper layers) chek old epistatic intreaction file from Master thesis
         for intGroup in tqdm(potentialInteractions):
             # minweight sum not needed. So do not compute it.
-            #minWeightsSum = 0
-            '''for i in range(len(snpsDict[intGroup[0]][2])):
+            minWeightsSum = 0
+            for i in range(len(snpsDict[intGroup[0]][2])):
                 minWeightsSum += min(snpsDict[intGroup[0]]
-                                    [2][i], snpsDict[intGroup[1]][2][i])'''
+                                    [2][i], snpsDict[intGroup[1]][2][i])
 
             # the following lines of code are  used to study the interaction strength according to the min vec only to check how to exploit it.
             #------------------------#
-            #minVecComputation[intGroup] = minWeightsSum
+            minVecComputation[intGroup] = minWeightsSum
             #------------------------#
 
             #####################################################################################################
@@ -265,9 +266,11 @@ if __name__ == "__main__":
             firstSigma = s[0]
             # -1 for normalization in [0,1]
             similarity = (firstSigma**2 - 1)/(frobeniusNorm2 - 1)
-
-            interactions[intGroup] = similarity
+            
+            #just cosine
+            #interactions[intGroup] = similarity
             # considering also min
+            interactions[intGroup] = minVecComputation[intGroup]*similarity
             #interactions[intGroup] = minVecComputation[intGroup]*pairwise.cosine_similarity((snpsDict[intGroup[0]][1]).reshape(1,-1), snpsDict[intGroup[1]][1].reshape(1,-1))
 
     # sort pairs according to interaction strenght
