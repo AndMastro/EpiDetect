@@ -14,7 +14,7 @@ from os.path import isfile, join
 
 
 
-DATASET_DIR_PATH = "../data/largeFiles/datasets/synthetic/unknown_risk_model_MAF03_her08_prev05_3SNP_EDM-1/"
+DATASET_DIR_PATH = "../data/largeFiles/datasets/synthetic/additive_risk_model_MAF05_eta01_theta01_EDM-1/"
 PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/"
 
 

@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 INPUT_SIZE = 256*3  # 804 SBP, 1026 DBP, 849 PP
-DATASET_NAME = "unknown_risk_model_MAF03_her08_prev05_3SNP_EDM-1_1"
+DATASET_NAME = "additive_risk_model_MAF05_eta01_theta01_EDM-1_10"
 if __name__ == "__main__":
 
     trueData = False  # variable stating if using true or generated data
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     print("Loading SNPs database...")
 
     sbpSNPs = snpRead(
-        "..\\data\\snpList256_3SNP.bim")
+        "..\\data\\snpList256.bim")
 
     dense1 = layerWeights0[0]
     dense2 = layerWeights1[0]
