@@ -13,11 +13,11 @@ from operator import add
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-INPUT_SIZE = 256*3  # 804 SBP, 1026 DBP, 849 PP
-DATASET_NAME = "unknown_risk_model_MAF03_her08_prev05_3SNP_EDM-1_1"
+INPUT_SIZE = 849  # 256*3  804 SBP, 1026 DBP, 849 PP
+DATASET_NAME = "SNPS_PHENO_PP"
 if __name__ == "__main__":
 
-    trueData = False  # variable stating if using true or generated data
+    trueData = True  # variable stating if using true or generated data
 
     # if u wanna save on file
     save = False
@@ -36,18 +36,23 @@ if __name__ == "__main__":
     sbpSNPs = None
 
     layerWeights0 = np.load(
-        '..\\data\\weights\\layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\BP\\layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights1 = np.load(
-        '..\\data\\weights\\layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\BP\\layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights2 = np.load(
-        '..\\data\\weights\\layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\BP\\layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights3 = np.load(
-        '..\\data\\weights\\layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\BP\\layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
 
     print("Loading SNPs database...")
 
     sbpSNPs = snpRead(
-        "..\\data\\snpList256_3SNP.bim")
+        "..\\data\\allChrom_PP.bim")
+
+    snpToGene = None
+
+    if trueData == True:
+        snpToGene = geneRead("..\\data\\snpsToGene_PP_Ensembl.txt")
 
     dense1 = layerWeights0[0]
     dense2 = layerWeights1[0]
@@ -210,14 +215,15 @@ if __name__ == "__main__":
             '''interactions[intGroup] = pairwise.cosine_similarity(
                 (snpsDict[intGroup[0]][1]).reshape(1, -1), snpsDict[intGroup[1]][1].reshape(1, -1))'''
             # considering also min
-            interactions[intGroup] = minVecComputation[intGroup]*pairwise.cosine_similarity((snpsDict[intGroup[0]][1]).reshape(1,-1), snpsDict[intGroup[1]][1].reshape(1,-1))
+            interactions[intGroup] = minVecComputation[intGroup]*pairwise.cosine_similarity(
+                (snpsDict[intGroup[0]][1]).reshape(1, -1), snpsDict[intGroup[1]][1].reshape(1, -1))
 
     # interaction detection only > 2 way interaction (generalized cosine similarity for n vectors)
     if interactionWay > 2:
 
         minVecComputation = {}
 
-        #uncomment of big useless computational overhead
+        # uncomment of big useless computational overhead
         '''for group in potentialInteractions:
             minVecComputation[group] = []'''
 
@@ -229,7 +235,7 @@ if __name__ == "__main__":
             minWeightsSum = 0
             for i in range(len(snpsDict[intGroup[0]][2])):
                 minWeightsSum += min(snpsDict[intGroup[0]]
-                                    [2][i], snpsDict[intGroup[1]][2][i])
+                                     [2][i], snpsDict[intGroup[1]][2][i])
 
             # the following lines of code are  used to study the interaction strength according to the min vec only to check how to exploit it.
             #------------------------#
@@ -266,8 +272,8 @@ if __name__ == "__main__":
             firstSigma = s[0]
             # -1 for normalization in [0,1]
             similarity = (firstSigma**2 - 1)/(frobeniusNorm2 - 1)
-            
-            #just cosine
+
+            # just cosine
             #interactions[intGroup] = similarity
             # considering also min
             interactions[intGroup] = minVecComputation[intGroup]*similarity
@@ -287,21 +293,36 @@ if __name__ == "__main__":
 
     interactingSNPs = []
 
-    
-    if interactionWay == 2:
-        for pair in intRank:
-            interactingSNPs.append(
-                (pair[0], (snpsDict[pair[1][0]][0], snpsDict[pair[1][1]][0])))  # add genes
+    if trueData:
+        if interactionWay == 2:
+            for pair in intRank:
+                interactingSNPs.append((pair[0], (snpsDict[pair[1][0]][0], snpsDict[pair[1][1]][0]), (
+                    snpToGene[snpsDict[pair[1][0]][0]], snpToGene[snpsDict[pair[1][1]][0]])))  # add genes
 
-    if interactionWay == 3:  # render more general for > 2
-        for group in intRank:
-            interactingSNPs.append(
-                (group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]][0], snpsDict[group[1][2]][0])))  # add genes
+        if interactionWay == 3:  # render more general for > 2
+            for group in intRank:
+                interactingSNPs.append((group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]][0], snpsDict[group[1][2]][0]), (
+                    snpToGene[snpsDict[group[1][0]][0]], snpToGene[snpsDict[group[1][1]][0]], snpToGene[snpsDict[group[1][2]][0]])))  # add genes
 
-    if interactionWay == 4:  # render more general for > 2
-        for group in intRank:
-            interactingSNPs.append((group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]]
-                                               [0], snpsDict[group[1][2]][0], snpsDict[group[1][3]][0])))  # add genes
+        if interactionWay == 4:  # render more general for > 2
+            for group in intRank:
+                interactingSNPs.append((group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]][0], snpsDict[group[1][2]][0], snpsDict[group[1][3]][0]), (
+                    snpToGene[snpsDict[group[1][0]][0]], snpToGene[snpsDict[group[1][1]][0]], snpToGene[snpsDict[group[1][2]][0]], snpToGene[snpsDict[group[1][3]][0]])))
+    else:
+        if interactionWay == 2:
+            for pair in intRank:
+                interactingSNPs.append(
+                    (pair[0], (snpsDict[pair[1][0]][0], snpsDict[pair[1][1]][0])))  # add genes
+
+        if interactionWay == 3:  # render more general for > 2
+            for group in intRank:
+                interactingSNPs.append(
+                    (group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]][0], snpsDict[group[1][2]][0])))  # add genes
+
+        if interactionWay == 4:  # render more general for > 2
+            for group in intRank:
+                interactingSNPs.append((group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]]
+                                                   [0], snpsDict[group[1][2]][0], snpsDict[group[1][3]][0])))  # add genes
 
     # and now, analyze
 
@@ -316,8 +337,11 @@ if __name__ == "__main__":
         intFile = open(fileName, "w+")
 
         for pair in interactingSNPs:
-            intFile.write(
-                str(pair[1]) + " " + str(pair[0]) + "\n")
+            if trueData:
+                intFile.write(
+                    str(pair[1]) + " " + str(pair[2]) + " " + str(pair[0]) + "\n")
+            else:
+                intFile.write(str(pair[1]) + " " + str(pair[0]) + "\n")
 
         print("File with interactions saved.")
 
@@ -329,7 +353,7 @@ if __name__ == "__main__":
 
     interValues = []
     for val in interactingSNPs:
-            interValues.append((val[0].tolist())[0][0])
+        interValues.append((val[0].tolist())[0][0])
 
     plt.hist(interValues)
 
@@ -342,8 +366,8 @@ if __name__ == "__main__":
 
     sys.exit()
 
-        ################################################################################
-        ################################################################################
-        ##################              FILE ENDS HERE            ######################
-        ################################################################################
-        ################################################################################
+    ################################################################################
+    ################################################################################
+    ##################              FILE ENDS HERE            ######################
+    ################################################################################
+    ################################################################################

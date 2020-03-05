@@ -120,7 +120,7 @@ if __name__ == "__main__":
         xGeno = dataset[ind][0]  # one-hot encoding for the SNPs
         #xGeno += dataset[ind][762:]
         trainX.append(xGeno)
-        label = dataset[ind][1]  # this is int, does it want float?
+        label = dataset[ind][1]  #index is 2 if we use real SBP, PP andDBP data (1 is for pheno). Index is 1 for synthetic data.
         trainY.append(label)
     print("Dataset loaded. Num samples: ")
     print(len(trainX))
