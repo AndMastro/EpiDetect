@@ -13,8 +13,8 @@ from operator import add
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-INPUT_SIZE = 849  # 256*3  804 SBP, 1026 DBP, 849 PP
-DATASET_NAME = "SNPS_PHENO_PP"
+INPUT_SIZE = 1026  # 256*3  804 SBP, 1026 DBP, 849 PP
+DATASET_NAME = "SNPS_PHENO_DBP"
 if __name__ == "__main__":
 
     trueData = True  # variable stating if using true or generated data
@@ -47,12 +47,12 @@ if __name__ == "__main__":
     print("Loading SNPs database...")
 
     sbpSNPs = snpRead(
-        "..\\data\\allChrom_PP.bim")
+        "..\\data\\allChrom_DBP.bim")
 
     snpToGene = None
 
     if trueData == True:
-        snpToGene = geneRead("..\\data\\snpsToGene_PP_Ensembl.txt")
+        snpToGene = geneRead("..\\data\\snpsToGene_DBP_ensembl.txt")
 
     dense1 = layerWeights0[0]
     dense2 = layerWeights1[0]

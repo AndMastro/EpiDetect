@@ -13,7 +13,7 @@ from tensorflow import keras
 from tensorflow.keras import layers
 
 PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/BP/"
-DATASET_NAME = "SNPS_PHENO_PP"
+DATASET_NAME = "SNPS_PP_AVG"
 PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME + ".p"
 
 dataset = {}
@@ -53,7 +53,7 @@ def build_model():
 
     optimizer = tf.keras.optimizers.Adam(lr=LEARNING_RATE)
 
-    model.compile(loss='mean_squared_error',  # alternate sqaure and absolute
+    model.compile(loss='mean_squared_error',  # alternate square and absolute
                   optimizer=optimizer,
                   metrics=['mean_absolute_error', 'mean_squared_error'])
     return model
