@@ -11,7 +11,7 @@ def snpRead(path):
         
     return sbpSNPs
 
-def geneRead(path):
+def geneRead(path, path_missing):
     fp = open(path, 'r')
     lines = fp.readlines()
     snpToGene = {}
@@ -21,8 +21,28 @@ def geneRead(path):
         snpID = line[0].replace(" ","")
         gene = line[-1].replace(" ","")
         snpToGene[snpID] = gene
+
+    fp.close()
         
-        
+    fpm = open(path_missing, 'r')
+    lines = fpm.readlines()
+    
+    missing_manual_mapping = {}
+
+    for line in lines:
+        line = line.strip().split(" ")
+        snpID = line[0].replace(" ","")
+        gene = line[-1].replace(" ","")
+        missing_manual_mapping[snpID] = gene
+    
+    #putting manually annotate gene in lieu of None
+
+    for snp in snpToGene:
+        if snpToGene[snp] == "None":
+            snpToGene[snp] = missing_manual_mapping[snp]
+
+    fpm.close()
+
     return snpToGene
 
 if __name__ == "__main__":

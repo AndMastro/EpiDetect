@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 INPUT_SIZE = 1026  # 256*3  804 SBP, 1026 DBP, 849 PP
-DATASET_NAME = "SNPS_PHENO_DBP"
+DATASET_NAME = "SNPS_DBP_AVG"
 if __name__ == "__main__":
 
     trueData = True  # variable stating if using true or generated data
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     snpToGene = None
 
     if trueData == True:
-        snpToGene = geneRead("..\\data\\snpsToGene_DBP_ensembl.txt")
+        snpToGene = geneRead("..\\data\\snp_gene_mappings\\snpsToGene_DBP_ensembl_manual.txt", "..\\data\\snp_gene_mappings\\notMapped_DBP_ensembl_closest.txt")
 
     dense1 = layerWeights0[0]
     dense2 = layerWeights1[0]
@@ -337,9 +337,20 @@ if __name__ == "__main__":
         intFile = open(fileName, "w+")
 
         for pair in interactingSNPs:
-            if trueData:
+            '''if trueData:
                 intFile.write(
-                    str(pair[1]) + " " + str(pair[2]) + " " + str(pair[0]) + "\n")
+                    str(pair[1]) + " " + str(pair[2]) + " " + str(pair[0]) + "\n")'''
+
+            #georgios format
+            if trueData:
+                snp1 = str(pair[1][0])
+                snp2 = str(pair[1][1])
+                gene1 = str(pair[2][0])
+                gene2 = str(pair[2][1])
+                score = str(pair[0])[2:-2]
+
+                intFile.write(
+                    snp1 + "\t" + snp2 + "\t" + gene1 + "\t" + gene2 + "\t" + score + "\n")
             else:
                 intFile.write(str(pair[1]) + " " + str(pair[0]) + "\n")
 
