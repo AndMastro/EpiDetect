@@ -3,13 +3,13 @@ import csv
 import pandas
 import pickle
 from tqdm import tqdm
-from snpReader import snpRead
+from snpReader import snpRead, snpRead_chr_pos
 
 #SBP data
-IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_SBP_recoded12.csv"
+'''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_SBP_recoded12.csv"
 IND_SBP = "..\\data\\largeFiles\\SBP_2_measures.csv" 
 TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_SBP_AVG_BEAM.txt"
-SNP_FILE = "..\\data\\allChrom_SBP.bim"
+SNP_FILE = "..\\data\\allChrom_SBP.bim"'''
 
 #DBP data
 '''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_DBP_recoded12.csv"
@@ -18,10 +18,10 @@ TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_DBP_AVG_BEAM.txt"
 SNP_FILE = "..\\data\\allChrom_DBP.bim"'''
 
 #PP data
-'''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_PP_recoded12.csv"
+IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_PP_recoded12.csv"
 IND_SBP = "..\\data\\largeFiles\\PP_2_measures.csv" 
 TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_PP_AVG_BEAM.txt"
-SNP_FILE = "..\\data\\allChrom_PP.bim"'''
+SNP_FILE = "..\\data\\allChrom_PP.bim"
 
 
 if __name__ == "__main__":
@@ -77,27 +77,41 @@ if __name__ == "__main__":
         break
     
     print("Reading snps...")
-    sbpSNPs = snpRead(SNP_FILE)
+    sbpSNPs = snpRead_chr_pos(SNP_FILE)
 
     
     print("Dataset dict generated. Saving as text...")
 
     with open(TEXT_PATH, 'w+') as saveFile:
-        numSNPs = len(sbpSNPs)
+        numInds = len(completeDataset)
         added = 0
-        for snp in sbpSNPs:
-            saveFile.write(sbpSNPs[snp])
-            added += 1
-            saveFile.write("\t")
-            if added == numSNPs:
-                saveFile.write("Outcome" + "\n")
-
+        saveFile.write("ID\tChr\tpos\t") #TO CHECK IF TAB IS OK OR WE WANT SPACE
         for ind in tqdm(completeDataset):
-            geno = completeDataset[ind][0]
+            added += 1
             BP = completeDataset[ind][2]
-            for elem in geno:
-                saveFile.write(str(elem) + "\t")
-            saveFile.write(str(BP) + "\n")
+            if added == numInds:
+                saveFile.write(str(BP) + "\n")
+            else:
+                saveFile.write(str(BP) + " ")
+
+           
+        for snp in tqdm(sbpSNPs):
+            rsID = sbpSNPs[snp][0]
+            chrom = sbpSNPs[snp][1]
+            pos = sbpSNPs[snp][2]
+            saveFile.write(rsID + "\t" + "chr" + chrom + "\t" + pos + "\t")
+            added = 0
+            for ind in completeDataset:
+                geno = completeDataset[ind][0]
+                mutation = geno[snp]
+                added += 1
+                if added == numInds:
+                    saveFile.write(str(mutation) + "\n")
+                else:
+                    saveFile.write(str(mutation) + " ")
+            
+
+
 
     print("File saved.")
 

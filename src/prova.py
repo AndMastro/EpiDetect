@@ -1,4 +1,11 @@
 from snpReader import geneRead
+import csv
+from tqdm import tqdm
 
 if __name__ == "__main__":
-    snpToGene = geneRead("..\\data\\snp_gene_mappings\\snpsToGene_SBP_ensembl_manual.txt", "..\\data\\snp_gene_mappings\\notMapped_SBP_ensembl_closest.txt")
+    with open("../data/largeFiles/PP_2_measures.csv", mode='r') as csv_file:
+         csv_reader = csv.reader(csv_file)
+         for row in tqdm(csv_reader):
+            if (row[0] == "-1"):
+                print(row)
+                break

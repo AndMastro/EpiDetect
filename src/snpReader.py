@@ -11,6 +11,20 @@ def snpRead(path):
         
     return sbpSNPs
 
+def snpRead_chr_pos(path):
+    fp = open(path, 'r')
+    numSNPs = 0
+    lines = fp.readlines()
+    sbpSNPs = {}
+    for line in lines:
+        chrom = line.split("\t")[0]
+        snp = line.split("\t")[1]
+        pos = line.split("\t")[3]
+        sbpSNPs[numSNPs] = [snp, chrom, pos]
+        numSNPs+=1
+        
+    return sbpSNPs
+
 def geneRead(path, path_missing):
     fp = open(path, 'r')
     lines = fp.readlines()
