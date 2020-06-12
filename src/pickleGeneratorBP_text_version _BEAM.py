@@ -6,22 +6,22 @@ from tqdm import tqdm
 from snpReader import snpRead, snpRead_chr_pos
 
 #SBP data
-'''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_SBP_recoded12.csv"
+IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_SBP_recoded12.csv"
 IND_SBP = "..\\data\\largeFiles\\SBP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_SBP_AVG_BEAM.txt"
-SNP_FILE = "..\\data\\allChrom_SBP.bim"'''
+TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_SBP_AVG_BEAM_logistic.txt"
+SNP_FILE = "..\\data\\allChrom_SBP.bim"
 
 #DBP data
 '''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_DBP_recoded12.csv"
 IND_SBP = "..\\data\\largeFiles\\DBP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_DBP_AVG_BEAM.txt"
+TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_DBP_AVG_BEAM_logistic.txt"
 SNP_FILE = "..\\data\\allChrom_DBP.bim"'''
 
 #PP data
-IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_PP_recoded12.csv"
+'''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_PP_recoded12.csv"
 IND_SBP = "..\\data\\largeFiles\\PP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_PP_AVG_BEAM.txt"
-SNP_FILE = "..\\data\\allChrom_PP.bim"
+TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_PP_AVG_BEAM_logistic.txt"
+SNP_FILE = "..\\data\\allChrom_PP.bim"'''
 
 
 if __name__ == "__main__":
@@ -79,20 +79,33 @@ if __name__ == "__main__":
     print("Reading snps...")
     sbpSNPs = snpRead_chr_pos(SNP_FILE)
 
-    
+    print("Computing mean BP value")
+    meanBP = 0
+    for ind in tqdm(completeDataset):
+            meanBP += completeDataset[ind][2]
+
+    meanBP = meanBP/len(completeDataset)
+
     print("Dataset dict generated. Saving as text...")
 
     with open(TEXT_PATH, 'w+') as saveFile:
         numInds = len(completeDataset)
         added = 0
-        saveFile.write("ID\tChr\tpos\t") #TO CHECK IF TAB IS OK OR WE WANT SPACE
+        saveFile.write("ID\tChr\tPos\t") #TO CHECK IF TAB IS OK OR WE WANT SPACE
         for ind in tqdm(completeDataset):
             added += 1
             BP = completeDataset[ind][2]
-            if added == numInds:
-                saveFile.write(str(BP) + "\n")
+            if added == 400:
+                label = 0
+                if BP > meanBP:
+                    label = 1
+                saveFile.write(str(label) + "\n")
+                break
             else:
-                saveFile.write(str(BP) + " ")
+                label = 0
+                if BP > meanBP:
+                    label = 1
+                saveFile.write(str(label) + " ")
 
            
         for snp in tqdm(sbpSNPs):
