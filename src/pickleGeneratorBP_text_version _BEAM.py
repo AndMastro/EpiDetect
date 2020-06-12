@@ -8,19 +8,19 @@ from snpReader import snpRead, snpRead_chr_pos
 #SBP data
 IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_SBP_recoded12.csv"
 IND_SBP = "..\\data\\largeFiles\\SBP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_SBP_AVG_BEAM_logistic.txt"
+TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_SBP_AVG_BEAM_cases_controls.txt"
 SNP_FILE = "..\\data\\allChrom_SBP.bim"
 
 #DBP data
 '''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_DBP_recoded12.csv"
 IND_SBP = "..\\data\\largeFiles\\DBP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_DBP_AVG_BEAM_logistic.txt"
+TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_DBP_AVG_BEAM_cases_controls.txt"
 SNP_FILE = "..\\data\\allChrom_DBP.bim"'''
 
 #PP data
 '''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_PP_recoded12.csv"
 IND_SBP = "..\\data\\largeFiles\\PP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_PP_AVG_BEAM_logistic.txt"
+TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_PP_AVG_BEAM_cases_controls.txt"
 SNP_FILE = "..\\data\\allChrom_PP.bim"'''
 
 
@@ -95,7 +95,7 @@ if __name__ == "__main__":
         for ind in tqdm(completeDataset):
             added += 1
             BP = completeDataset[ind][2]
-            if added == 400:
+            if added == numInds:
                 label = 0
                 if BP > meanBP:
                     label = 1
