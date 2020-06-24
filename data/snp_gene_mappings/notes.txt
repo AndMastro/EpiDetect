@@ -1,0 +1,3 @@
+those files are used to perform a proper gene mapping
+keeping into account also missing mappings, that are substituted
+with the closest gene to the SNP.
