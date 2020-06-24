@@ -3,25 +3,25 @@ import csv
 import pandas
 import pickle
 from tqdm import tqdm
-from snpReader import snpRead, snpRead_chr_pos
+from snpReader import snpRead
 
 #SBP data
 '''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_SBP_recoded12.csv"
 IND_SBP = "..\\data\\largeFiles\\SBP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_SBP_AVG_BEAM_cases_controls_1_12th.txt"
+TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_SBP_AVG_BOOST_cases_controls.txt"
 SNP_FILE = "..\\data\\allChrom_SBP.bim"'''
 
 #DBP data
-IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_DBP_recoded12.csv"
+'''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_DBP_recoded12.csv"
 IND_SBP = "..\\data\\largeFiles\\DBP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_DBP_AVG_BEAM_cases_controls_1_12th.txt"
-SNP_FILE = "..\\data\\allChrom_DBP.bim"
+TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_DBP_AVG_BOOST_cases_controls.txt"
+SNP_FILE = "..\\data\\allChrom_DBP.bim"'''
 
 #PP data
-'''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_PP_recoded12.csv"
+IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_PP_recoded12.csv"
 IND_SBP = "..\\data\\largeFiles\\PP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_PP_AVG_BEAM_cases_controls_1_12th.txt"
-SNP_FILE = "..\\data\\allChrom_PP.bim"'''
+TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_PP_AVG_BOOST_cases_controls.txt"
+SNP_FILE = "..\\data\\allChrom_PP.bim"
 
 
 if __name__ == "__main__":
@@ -44,7 +44,7 @@ if __name__ == "__main__":
                 elif row[i] == row[i+1] == "2":
                     genoVector += [2]
                 else:
-                    genoVector += [-1] #BEAM wants negative numbers for missing alleles
+                    genoVector += [-1]
             genoType[indID] = genoVector
 
     print(genoType["1000018"])
@@ -77,9 +77,9 @@ if __name__ == "__main__":
         break
     
     print("Reading snps...")
-    sbpSNPs = snpRead_chr_pos(SNP_FILE)
+    sbpSNPs = snpRead(SNP_FILE)
 
-    numInds = len(completeDataset) // 12
+    numInds = len(completeDataset)
 
     print("Computing mean BP value")
     meanBP = 0
@@ -87,51 +87,45 @@ if __name__ == "__main__":
     for ind in tqdm(completeDataset):
             meanBP += completeDataset[ind][2]
             tried += 1
-            if tried == numInds:
-                break
+            '''if tried == numInds:
+                break'''
 
     meanBP = meanBP/numInds
-
+    
     print("Dataset dict generated. Saving as text...")
 
     with open(TEXT_PATH, 'w+') as saveFile:
-        
+        numSNPs = len(sbpSNPs)
         added = 0
-        saveFile.write("ID\tChr\tPos\t")
-        for ind in tqdm(completeDataset):
+        #the commented code adds rsids, not used in BOOST file format
+        '''for snp in sbpSNPs:
+            saveFile.write(sbpSNPs[snp])
             added += 1
+            saveFile.write("\t")
+            if added == numSNPs:
+                saveFile.write("Outcome" + "\n")'''
+        #indAdded = 0
+        for ind in tqdm(completeDataset):
+            geno = completeDataset[ind][0]
             BP = completeDataset[ind][2]
-            if added == numInds:
-                label = 0
-                if BP > meanBP:
-                    label = 1
-                saveFile.write(str(label) + "\n")
-                break
-            else:
-                label = 0
-                if BP > meanBP:
-                    label = 1
-                saveFile.write(str(label) + " ")
-
-           
-        for snp in tqdm(sbpSNPs):
-            rsID = sbpSNPs[snp][0]
-            chrom = sbpSNPs[snp][1]
-            pos = sbpSNPs[snp][2]
-            saveFile.write(rsID + "\t" + "chr" + chrom + "\t" + pos + "\t")
-            added = 0
-            for ind in completeDataset:
-                geno = completeDataset[ind][0]
-                mutation = geno[snp]
-                added += 1
-                if added == numInds:
-                    saveFile.write(str(mutation) + "\n")
-                    break
-                else:
-                    saveFile.write(str(mutation) + " ")
+            #turn into cases/controls, since BOOST wants that
+            value = 0
+            if BP > meanBP:
+                value = 1
+            saveFile.write(str(value) + " ")
             
+            
+            for elem in geno:
+                added += 1
+                if added == numSNPs:
+                    saveFile.write(str(elem) + "\n")
+                else:
+                    saveFile.write(str(elem) + " ")
+            added = 0
 
-
+            '''indAdded += 1
+            if indAdded == numInds:
+                break'''
 
     print("File saved.")
 
