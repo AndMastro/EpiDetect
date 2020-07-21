@@ -1,3 +1,6 @@
+Avg degree: 10.638297872340425
+
+Gene	degree
 Gene	Degree
 PRKAG1	139
 L2HGDH	124
