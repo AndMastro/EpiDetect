@@ -115,12 +115,36 @@ if __name__ == "__main__":
             sys.exit()
         
         elif centrality == "radiality":
-            print("\nNOT YET IMPLEMENTED")
-            sys.exit()
+            diameter = nx.diameter(G)
+            nodes = G.nodes()
+            numNodes = G.number_of_nodes()
+            centrality_measure = {}
+
+            for gene in nodes:
+                paths = nx.shortest_path_length(G, source = gene)
+                for target in paths:
+                    paths[target] = (diameter + 1) - paths[target]
+                centrality_measure[gene] = sum(list(paths.values())) / (numNodes-1)
+            
+            avg_centrality = sum(centrality_measure.values())/numNodes
         
-        elif centrality == "stress":
-            print("\nNOT YET IMPLEMENTED")
-            sys.exit()
+        elif centrality == "stress": # DIFFERNET VALUES FORM CENTISCAPE! WHY? TO CHECK
+
+            all_paths = dict(nx.all_pairs_shortest_path(G))
+            nodes = G.nodes()
+            numNodes = G.number_of_nodes()
+            centrality_measure = {}
+
+            for gene in nodes:
+                for gene1 in all_paths:
+                    for gene2 in all_paths:
+                        if gene in all_paths[gene1][gene2]:
+                            if gene not in centrality_measure:
+                                centrality_measure[gene] = 1
+                            else:
+                                centrality_measure[gene] += 1
+
+            avg_centrality = sum(centrality_measure.values())/numNodes
 
         elif centrality == "centroid_value":
             print("\nNOT YET IMPLEMENTED")
@@ -158,6 +182,7 @@ if __name__ == "__main__":
                 central_edges.append((gene1, gene2))
         central_G = nx.Graph(name = "Central Genes Network")
 
+        central_G.add_nodes_from(central_genes)
         central_G.add_edges_from(central_edges)
 
         print(nx.info(central_G))
