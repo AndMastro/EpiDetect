@@ -154,8 +154,43 @@ if __name__ == "__main__":
             print("\nNOT YET IMPLEMENTED")
             sys.exit()
 
-        elif centrality == "edge_betweenness":
-            print("\nNOT YET IMPLEMENTED")
+        elif centrality == "edge_betweenness": #values are different from Centiscape but the ranking is the same
+
+            centrality_measure = nx.edge_betweenness_centrality(G, normalized = False)
+            avg_centrality = sum(centrality_measure.values())/G.number_of_edges()
+
+            print("Average " + centrality + ": " + str(avg_centrality))
+
+            central_edges = []
+            central_measures = []
+            for edge in centrality_measure:
+                if centrality_measure[edge] > avg_centrality:
+                    central_edges.append(edge)
+                    central_measures.append(centrality_measure[edge])
+            
+            central_edges = [x for _,x in sorted(zip(central_measures,central_edges), reverse=True)]
+            
+            central_G = nx.Graph(name = "Central Genes Network")
+
+            central_G.add_edges_from(central_edges)
+
+            print(nx.info(central_G))
+
+            central_genes = central_G.nodes()
+            
+            SAVE_PATH = DATA_FILE[:-4] + "_" + centrality +"_CENTRAL_GENES.txt"
+        
+
+            with open(SAVE_PATH, "w+") as saveFile:
+                saveFile.write("Avg " + centrality +": " + str(avg_centrality) + "\n\n")
+                saveFile.write("Gene"+ "\n")
+                for gene in central_genes:
+                    saveFile.write(gene + "\n")
+
+                saveFile.write("\nGene1\t"+ "Gene2\t" + centrality +"\n")
+                for edge in central_edges:
+                    saveFile.write(edge[0] + "\t" + edge[1] + "\t" + str(centrality_measure[edge]) + "\n")
+
             sys.exit()
             
         else:
