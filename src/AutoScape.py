@@ -128,7 +128,7 @@ if __name__ == "__main__":
             
             avg_centrality = sum(centrality_measure.values())/numNodes
         
-        elif centrality == "stress": # DIFFERNET VALUES FORM CENTISCAPE! WHY? TO CHECK
+        elif centrality == "stress": # DIFFERNET VALUES FORM CENTISCAPE! WHY? TO CHECK. First ranked genes are the same, tho.
 
             all_paths = dict(nx.all_pairs_shortest_path(G))
             nodes = G.nodes()
