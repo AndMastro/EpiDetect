@@ -1,6 +1,7 @@
 import networkx as nx
 import sys
 import csv
+from tqdm import tqdm
 
 if __name__ == "__main__":
     
@@ -114,7 +115,7 @@ if __name__ == "__main__":
             print("\nNetwork average distance (avg shortest path): " + str(distance))
             sys.exit()
         
-        elif centrality == "radiality":
+        elif centrality == "radiality": #slighly differnet values from Centiscape (raking is the same). Difference is probably due to apporx. Check on documentation later
             diameter = nx.diameter(G)
             nodes = G.nodes()
             numNodes = G.number_of_nodes()
@@ -128,7 +129,7 @@ if __name__ == "__main__":
             
             avg_centrality = sum(centrality_measure.values())/numNodes
         
-        elif centrality == "stress": # DIFFERNET VALUES FORM CENTISCAPE! WHY? TO CHECK. First ranked genes are the same, tho.
+        elif centrality == "stress": # DIFFERNET VALUES FROM CENTISCAPE! WHY? TO CHECK. First ranked genes are the same, tho.
 
             all_paths = dict(nx.all_pairs_shortest_path(G))
             nodes = G.nodes()
@@ -147,8 +148,33 @@ if __name__ == "__main__":
             avg_centrality = sum(centrality_measure.values())/numNodes
 
         elif centrality == "centroid_value":
-            print("\nNOT YET IMPLEMENTED")
-            sys.exit()
+            
+            centrality_measure = {}
+
+            nodes = G.nodes()
+
+            for gene1 in tqdm(nodes):
+                gene1_paths = nx.shortest_path_length(G, source=gene1)
+                gene1_closer = []
+                for gene2 in nodes:
+                    if gene1 != gene2:
+                        gene2_paths = nx.shortest_path_length(G, source=gene2)
+                        closer_1 = 0
+                        closer_2 = 0
+                        for gene_target in nodes:
+                            if gene_target != gene1 and gene_target != gene2:
+                                if gene1_paths[gene_target] < gene2_paths[gene_target]:
+                                    closer_1 += 1
+                                elif gene1_paths[gene_target] > gene2_paths[gene_target]:
+                                    closer_2 += 1
+                                else:
+                                    pass
+                        gene1_closer.append(closer_1-closer_2)
+                centrality_measure[gene1] = min(gene1_closer)
+
+            avg_centrality = sum(centrality_measure.values())/G.number_of_nodes()
+
+            
 
         elif centrality == "bridging":
             print("\nNOT YET IMPLEMENTED")
