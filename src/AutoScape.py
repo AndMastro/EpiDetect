@@ -139,7 +139,7 @@ if __name__ == "__main__":
             for gene in nodes:
                 for gene1 in all_paths:
                     for gene2 in all_paths:
-                        if gene in all_paths[gene1][gene2]:
+                        if gene in all_paths[gene1][gene2] and gene != gene1 and gene != gene2:
                             if gene not in centrality_measure:
                                 centrality_measure[gene] = 1
                             else:
@@ -176,9 +176,58 @@ if __name__ == "__main__":
 
             
 
-        elif centrality == "bridging":
-            print("\nNOT YET IMPLEMENTED")
-            sys.exit()
+        elif centrality == "bridging": #VALUES AND RAKING COMPLETELY DIFFERENT FROM CENTISCAPE.
+            
+            centrality_measure = {}
+
+            btw = nx.betweenness_centrality(G)
+
+            BC = {}
+
+            nodes = G.nodes()
+
+            for gene in nodes:
+                deg_gene = G.degree(gene)
+                neighbours = G.neighbors(gene) #it returns an iterator! Once iterated, your are done (can your reset it?).
+                #print(list(neighbors))
+                deg_neig = []
+                sigmas = []
+                neighbours_list = []
+                for n in neighbours:
+                    neighbours_list.append(n)
+                    deg_neig.append(G.degree(n))
+
+                #print(neighbours_list)
+                
+                for n in neighbours_list:
+                    edges_outgoing_neigborhood = 0
+                    neigh_n = G.neighbors(n)
+                    
+                    for n_n in neigh_n:
+                        if n_n != gene and n_n not in neighbours_list:
+                            edges_outgoing_neigborhood +=1 #we count the nodes, not edges but it is the same computation
+                    sigmas.append(edges_outgoing_neigborhood)
+
+                #print(sigmas)
+                   
+                SIGMA = []
+                for sig, d in zip(sigmas, deg_neig):
+                    if d == 1:
+                        SIGMA.append(0)
+                    else:
+                        SIGMA.append(sig/(d-1))
+
+                BC[gene] = (1/deg_gene) * sum(SIGMA)
+
+                #sys.exit()
+
+            for gene in nodes:
+                centrality_measure[gene] = btw[gene]*BC[gene]
+            #print(centrality_measure["KDF1"])
+
+
+            avg_centrality = sum(centrality_measure.values())/G.number_of_nodes()
+            
 
         elif centrality == "edge_betweenness": #values are different from Centiscape but the ranking is the same
 
@@ -220,7 +269,7 @@ if __name__ == "__main__":
             sys.exit()
             
         else:
-            print("Centrality measure not implemented: choose from [degree, betweenness, closeness, eigenvector, eccentricity, diameter, average_distance, radiality, stress, centroid_value, bridging, edge_betweenness]")
+            print("Centrality measure not recognized: choose from [degree, betweenness, closeness, eigenvector, eccentricity, diameter, average_distance, radiality, stress, centroid_value, bridging, edge_betweenness]")
             sys.exit()
 
         print("Average " + centrality + ": " + str(avg_centrality))
