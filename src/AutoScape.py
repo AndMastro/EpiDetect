@@ -163,7 +163,13 @@ if __name__ == "__main__":
                         closer_2 = 0
                         for gene_target in nodes:
                             if gene_target != gene1 and gene_target != gene2:
-                                if gene1_paths[gene_target] < gene2_paths[gene_target]:
+                                if gene_target not in gene1_paths and gene_target in gene2_paths:
+                                    closer_2 += 1
+                                elif gene_target not in gene2_paths and gene_target in gene1_paths:
+                                    closer_1 += 1
+                                elif gene_target not in gene2_paths and gene_target not in gene1_paths:
+                                    pass
+                                elif gene1_paths[gene_target] < gene2_paths[gene_target]:
                                     closer_1 += 1
                                 elif gene1_paths[gene_target] > gene2_paths[gene_target]:
                                     closer_2 += 1
