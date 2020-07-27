@@ -8,13 +8,19 @@ if __name__ == "__main__":
 
     arg_len = len(sys.argv)
 
-    if arg_len < 3:
-        print("ERROR: not enough arguments. Specify file and centrality measure")
+    if arg_len < 4:
+        print("ERROR: not enough arguments. Specify file, centrality measure and [top, all].")
         sys.exit()
 
+    if sys.argv[3] != "top" and sys.argv[3] != "all":
+        print("ERROR: choose \"top\" to get only the central genes or \"all\" to get all the genes in the network.")
+        sys.exit()
+
+    
     DATA_FILE = sys.argv[1]
     centrality = sys.argv[2]
 
+    top = sys.argv[3] == "top"
 
     edges = []
 
@@ -45,11 +51,17 @@ if __name__ == "__main__":
 
         central_genes = []
         central_measures = []
-        for pair in deg:
-            if pair[1] > avg_degree:
+
+        if top:
+            for pair in deg:
+                if pair[1] > avg_degree:
+                    central_genes.append(pair[0])
+                    central_measures.append(pair[1])
+        else:
+            for pair in deg:
                 central_genes.append(pair[0])
                 central_measures.append(pair[1])
-        
+
         central_genes = [x for _,x in sorted(zip(central_measures,central_genes), reverse=True)]
         central_edges = []
 
@@ -63,9 +75,12 @@ if __name__ == "__main__":
 
         print(nx.info(central_G))
         
+        SAVE_PATH = None
+        if top:
+            SAVE_PATH = DATA_FILE[:-4] + "_" + centrality +"_CENTRAL_GENES.txt"
+        else:
+            SAVE_PATH = DATA_FILE[:-4] + "_" + centrality + ".txt"
 
-        SAVE_PATH = DATA_FILE[:-4] + "_" + centrality +"_CENTRAL_GENES.txt"
-        
         with open(SAVE_PATH, "w+") as saveFile:
             saveFile.write("Avg " + centrality +": " + str(avg_degree) + "\n\n")
             saveFile.write("Gene\tDegree\n")
@@ -137,13 +152,11 @@ if __name__ == "__main__":
             centrality_measure = {}
 
             for gene in nodes:
+                centrality_measure[gene] = 0
                 for gene1 in all_paths:
                     for gene2 in all_paths:
                         if gene in all_paths[gene1][gene2] and gene != gene1 and gene != gene2:
-                            if gene not in centrality_measure:
-                                centrality_measure[gene] = 1
-                            else:
-                                centrality_measure[gene] += 1
+                            centrality_measure[gene] += 1
 
             avg_centrality = sum(centrality_measure.values())/numNodes
 
@@ -244,8 +257,14 @@ if __name__ == "__main__":
 
             central_edges = []
             central_measures = []
-            for edge in centrality_measure:
-                if centrality_measure[edge] > avg_centrality:
+
+            if top:
+                for edge in centrality_measure:
+                    if centrality_measure[edge] > avg_centrality:
+                        central_edges.append(edge)
+                        central_measures.append(centrality_measure[edge])
+            else:
+                for edge in centrality_measure:
                     central_edges.append(edge)
                     central_measures.append(centrality_measure[edge])
             
@@ -259,7 +278,11 @@ if __name__ == "__main__":
 
             central_genes = central_G.nodes()
             
-            SAVE_PATH = DATA_FILE[:-4] + "_" + centrality +"_CENTRAL_GENES.txt"
+            SAVE_PATH = None
+            if top:
+                SAVE_PATH = DATA_FILE[:-4] + "_" + centrality +"_CENTRAL_GENES.txt"
+            else:
+                SAVE_PATH = DATA_FILE[:-4] + "_" + centrality +".txt"
         
 
             with open(SAVE_PATH, "w+") as saveFile:
@@ -285,11 +308,17 @@ if __name__ == "__main__":
 
         central_genes = []
         central_measures = []
-        for gene in centrality_measure:
-            if centrality_measure[gene] > avg_centrality:
+
+        if top:
+            for gene in centrality_measure:
+                if centrality_measure[gene] > avg_centrality:
+                    central_genes.append(gene)
+                    central_measures.append(centrality_measure[gene])
+        else:
+            for gene in centrality_measure:
                 central_genes.append(gene)
                 central_measures.append(centrality_measure[gene])
-        
+
         central_genes = [x for _,x in sorted(zip(central_measures,central_genes), reverse=True)]
         central_edges = []
         
@@ -305,7 +334,11 @@ if __name__ == "__main__":
 
         central_G.nodes()
 
-        SAVE_PATH = DATA_FILE[:-4] + "_" + centrality +"_CENTRAL_GENES.txt"
+        SAVE_PATH = None
+        if top:
+            SAVE_PATH = DATA_FILE[:-4] + "_" + centrality +"_CENTRAL_GENES.txt"
+        else:
+            SAVE_PATH = DATA_FILE[:-4] + "_" + centrality +".txt"
         
 
         with open(SAVE_PATH, "w+") as saveFile:
