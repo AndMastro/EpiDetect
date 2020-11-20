@@ -1,1 +1,1 @@
-epiCID = thesis method and minVecSum
+EpiCID = thesis method and minVecSum

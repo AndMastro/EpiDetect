@@ -13,11 +13,12 @@ from operator import add
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-INPUT_SIZE = 1026  # 256*3  804 SBP, 1026 DBP, 849 PP
-DATASET_NAME = "SNPS_DBP_AVG"
+INPUT_SIZE = 256*3  # 256*3  804 SBP, 1026 DBP, 849 PP
+#DATASET_NAME = "SNPS_PP_AVG"
+DATASET_NAME = "epistatic_risk_model_MAF03_eta01_theta1_EDM-1_08"
 if __name__ == "__main__":
 
-    trueData = True  # variable stating if using true or generated data
+    trueData = False  # variable stating if using true or generated data
 
     # if u wanna save on file
     save = False
@@ -36,23 +37,24 @@ if __name__ == "__main__":
     sbpSNPs = None
 
     layerWeights0 = np.load(
-        '..\\data\\weights\\BP\\layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\GAMETES\\layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights1 = np.load(
-        '..\\data\\weights\\BP\\layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\GAMETES\\layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights2 = np.load(
-        '..\\data\\weights\\BP\\layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\GAMETES\\layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights3 = np.load(
-        '..\\data\\weights\\BP\\layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\GAMETES\\layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
 
     print("Loading SNPs database...")
 
     sbpSNPs = snpRead(
-        "..\\data\\allChrom_DBP.bim")
+        "..\\data\\snp_lists\\snpList256.bim")
 
     snpToGene = None
 
     if trueData == True:
-        snpToGene = geneRead("..\\data\\snp_gene_mappings\\snpsToGene_DBP_ensembl_manual.txt", "..\\data\\snp_gene_mappings\\notMapped_DBP_ensembl_closest.txt")
+        snpToGene = geneRead("..\\data\\snp_gene_mappings\\snpsToGene_PP_ensembl_manual.txt",
+                             "..\\data\\snp_gene_mappings\\notMapped_PP_ensembl_closest.txt")
 
     dense1 = layerWeights0[0]
     dense2 = layerWeights1[0]
@@ -328,7 +330,7 @@ if __name__ == "__main__":
 
     if save == True:
         counter = 0
-        fileName = "..\\data\\results\\epistaticInteraction\\synthetic\\" + \
+        fileName = "..\\data\\results\\epistaticInteraction\\EpiCID\\BP\\" + \
             str(interactionWay) + \
             "\\epistaticInteractions_thesisMethodandMinVecSum_" + DATASET_NAME + "_run{}.txt"
         while os.path.isfile(fileName.format(counter)):
@@ -341,7 +343,7 @@ if __name__ == "__main__":
                 intFile.write(
                     str(pair[1]) + " " + str(pair[2]) + " " + str(pair[0]) + "\n")'''
 
-            #georgios format
+            # georgios format
             if trueData:
                 snp1 = str(pair[1][0])
                 snp2 = str(pair[1][1])
@@ -361,6 +363,8 @@ if __name__ == "__main__":
             if "None" not in pair[2]:
                 print(str(pair[1]) + " " + str(pair[2]) +
                       " " + str(pair[0]) + "\n")
+
+    sys.exit()
 
     interValues = []
     for val in interactingSNPs:

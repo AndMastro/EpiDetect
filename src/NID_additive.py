@@ -2,8 +2,8 @@ from collections import OrderedDict
 
 if __name__ == "__main__":
 
-    path = "../data/results/epistaticInteraction/NID/2/epistaticInteractions_NID_purely_epistatic_risk_model_MAF005_her005_EDM-1_1_run0.txt"
-    save_path = "../data/results/epistaticInteraction/NID/2/epistaticInteractions_NID_purely_epistatic_risk_model_MAF005_her005_EDM-1_1_run0_SUM.txt"
+    path = "../data/results/epistaticInteraction/NID/2/epistaticInteractions_NID_epistatic_risk_model_MAF03_eta01_theta1_EDM-1_08_run0.txt"
+    save_path = "../data/results/epistaticInteraction/NID/2/epistaticInteractions_NID_epistatic_risk_model_MAF03_eta01_theta1_EDM-1_08_run0_SUM.txt"
 
     #simulated data
     interactions = {}

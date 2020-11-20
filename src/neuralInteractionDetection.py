@@ -32,18 +32,18 @@ if __name__ == "__main__":
     sbpSNPs = None
 
     layerWeights0 = np.load(
-        '..\\data\\weights\\layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\GAMETES\\layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights1 = np.load(
-        '..\\data\\weights\\layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\GAMETES\\layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights2 = np.load(
-        '..\\data\\weights\\layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\GAMETES\\layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights3 = np.load(
-        '..\\data\\weights\\layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '..\\data\\weights\\GAMETES\\layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
 
     print("Loading SNPs database...")
 
     sbpSNPs = snpRead(
-        "..\\data\\snpList256.bim")
+        "..\\data\\snp_lists\\snpList256.bim")
 
     snpToGene = None
 
