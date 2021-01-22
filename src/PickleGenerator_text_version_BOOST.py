@@ -13,8 +13,8 @@ from os import listdir
 from os.path import isfile, join
 
 
-DATASET_TYPE = "purely_epistatic"
-DATASET_DIR_PATH = "../data/largeFiles/datasets/synthetic/" + DATASET_TYPE + "/purely_epistatic_risk_model_MAF005_her005_EDM-1/"
+DATASET_TYPE = "additive"
+DATASET_DIR_PATH = "../data/largeFiles/datasets/synthetic/" + DATASET_TYPE + "/additive_risk_model_MAF01_eta01_theta05_EDM-1/"
 TEXT_DIR_PATH = "../data/largeFiles/datasets/text/synthetic/" + DATASET_TYPE + "/"
 
 

@@ -1,0 +1,6 @@
+Purely epistatic models MDR
+
+MAF: 0.05 her: 0.1
+	Acc: 10/10 (cv consistency)
+MAF: 0.05 her: 0.05
+	acc: 10/10

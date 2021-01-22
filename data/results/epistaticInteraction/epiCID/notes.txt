@@ -1,0 +1,2 @@
+Results on GAMETES data: Acc 1.
+For compicated methods such as threshold, 4 layers were used.
