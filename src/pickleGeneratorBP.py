@@ -5,25 +5,33 @@ import pickle
 from tqdm import tqdm
 
 #SBP data
-'''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_SBP_recoded12.csv"
-IND_SBP = "..\\data\\largeFiles\\SBP_2_measures.csv" 
-PICKLE_PATH = "..\\data\\largeFiles\\datasets\\pickles\\BP\\SNPS_SBP_AVG.p"'''
+'''IND_GENO_PATH_SQ = "../data/largeFiles/allChrom_SBP_recoded12.csv"
+IND_SBP = "../data/largeFiles/SBP_2_measures.csv" 
+PICKLE_PATH = "../data/largeFiles/datasets/pickles/BP/SNPS_SBP_AVG.p"'''
+
+#SBP data no van removed (264)
+IND_GENO_PATH_SQ = "../data/largeFiles/allChrom_SBP_recoded12.csv"
+IND_SBP = "../data/largeFiles/SBP_2_measures.csv" 
+PICKLE_PATH = "../data/largeFiles/datasets/pickles/BP/SNPS_SBP_AVG_no_van_removed.p"
 
 #DBP data
-'''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_DBP_recoded12.csv"
-IND_SBP = "..\\data\\largeFiles\\DBP_2_measures.csv" 
-PICKLE_PATH = "..\\data\\largeFiles\\datasets\\pickles\\BP\\SNPS_DBP_AVG.p"'''
+'''IND_GENO_PATH_SQ = "../data/largeFiles/allChrom_DBP_recoded12.csv"
+IND_SBP = "../data/largeFiles/DBP_2_measures.csv" 
+PICKLE_PATH = "../data/largeFiles/datasets/pickles/BP/SNPS_DBP_AVG.p"'''
 
 #PP data
-IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_PP_recoded12.csv"
-IND_SBP = "..\\data\\largeFiles\\PP_2_measures.csv" 
-PICKLE_PATH = "..\\data\\largeFiles\\datasets\\pickles\\BP\\SNPS_PP_AVG.p"
+'''IND_GENO_PATH_SQ = "../data/largeFiles/allChrom_PP_recoded12.csv"
+IND_SBP = "../data/largeFiles/PP_2_measures.csv" 
+PICKLE_PATH = "../data/largeFiles/datasets/pickles/BP/SNPS_PP_AVG.p"'''
 
 
 if __name__ == "__main__":
 
     
     genoType = {}
+
+    remove4 = True
+    to_remove = [16*2-1, 24*2-1, 136*2-1, 186*2-1]
     
     print("Generating one-hot encoding for SNPS...")
     with open(IND_GENO_PATH_SQ, mode='r') as csv_file:
@@ -33,6 +41,9 @@ if __name__ == "__main__":
             genoVector = []
             dim = len(row)
             for i in range(1,dim-1, 2):
+                if remove4 and i in to_remove:
+                    continue
+
                 if row[i] == "1" and row[i+1] == "2":
                     genoVector += [0,1,0]
                 elif row[i] == row[i+1] == "1":
@@ -44,6 +55,7 @@ if __name__ == "__main__":
             genoType[indID] = genoVector
 
     print(genoType["1000018"])
+    print(len(genoType["1000018"]))
 
     completeDataset= {}
     print("Generating full dataset with genotype, phenotypes and BP values...")
@@ -67,6 +79,7 @@ if __name__ == "__main__":
                 completeDataset[indID] = [genoVec, [float(elem) for elem in phenoVec], float(sbpValue)]
     
     print(completeDataset["1596781"])
+    print(len(completeDataset))
 
     for ind in completeDataset:
         print(completeDataset[ind][0])

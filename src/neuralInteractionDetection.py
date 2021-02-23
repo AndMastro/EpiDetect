@@ -1,3 +1,4 @@
+from epistaticCosineInteractionDetectionSNPAggregationMutliWay import DATASET_TYPE
 import numpy as np
 from itertools import combinations
 from snpReader import snpRead
@@ -9,11 +10,12 @@ import os
 
 #INPUT_SIZE = 849  # 256*3  804 SBP, 1026 DBP, 849 PP
 #DATASET_NAME = "SNPS_PP_AVG"
-INPUT_SIZE = 256*3  # 256*3  804 SBP, 1026 DBP, 849 PP
-DATASET_NAME = "epistatic_risk_model_MAF03_eta01_theta1_EDM-1_08"
+INPUT_SIZE = 264*3 #2000*3 #256*3  # 256*3  804 SBP, 1026 DBP, 849 PP
+DATASET_TYPE = "SBP"
+DATASET_NAME = "SNPS_SBP_AVG_no_van_removed"
 if __name__ == "__main__":
 
-    trueData = False  # variable stating if using true or generated data
+    trueData = True  # variable stating if using true or generated data
 
     # if u wanna save on file
     save = False
@@ -32,24 +34,24 @@ if __name__ == "__main__":
     sbpSNPs = None
 
     layerWeights0 = np.load(
-        '..\\data\\weights\\GAMETES\\layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/BP/layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights1 = np.load(
-        '..\\data\\weights\\GAMETES\\layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/BP/layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights2 = np.load(
-        '..\\data\\weights\\GAMETES\\layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/BP/layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights3 = np.load(
-        '..\\data\\weights\\GAMETES\\layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/BP/layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
 
     print("Loading SNPs database...")
 
     sbpSNPs = snpRead(
-        "..\\data\\snp_lists\\snpList256.bim")
+        "../data/snp_lists/allChrom_SBP_no_van_removed.bim")
 
     snpToGene = None
 
     if trueData == True:
-        snpToGene = geneRead("..\\data\\snp_gene_mappings\\snpsToGene_PP_ensembl_manual.txt",
-                             "..\\data\\snp_gene_mappings\\notMapped_PP_ensembl_closest.txt")
+        snpToGene = geneRead("../data/snp_gene_mappings/snpsToGene_" + DATASET_TYPE + "_ensembl_manual.txt",
+                             "../data/snp_gene_mappings/notMapped_" + DATASET_TYPE + "_ensembl_closest.txt")
 
     '''print(layerWeights0)
     print(layerWeights1)
@@ -162,14 +164,14 @@ if __name__ == "__main__":
         print(min(interactions.values()))'''
 
     counter = 0
-    fileName = "..\\data\\results\\epistaticInteraction\\NID\\" + \
+    fileName = "../data/results/epistaticInteraction/NID/" + \
         str(interactionWay) + \
-        "\\epistaticInteractions_NID_" + DATASET_NAME + "_run{}.txt"
+        "/epistaticInteractions_NID_" + DATASET_NAME + "_run{}.txt"
     while os.path.isfile(fileName.format(counter)):
         counter += 1
     fileName = fileName.format(counter)
     intFile = open(fileName, "w+")
-    # intFile100 = open("..\\data\\results\\epistaticInteraction\\268_SBP\\prove\\epistaticInteractions_268_200Units_NID_TOP_100_ONLYGENES.txt", "w+")
+    # intFile100 = open("../data/results/epistaticInteraction/268_SBP/prove/epistaticInteractions_268_200Units_NID_TOP_100_ONLYGENES.txt", "w+")
 
     # done in order to remove SNPs not related to genes (only kept for training since they intervene in SBP regulation but cannot raise epistatic phenomenon)
     if trueData:

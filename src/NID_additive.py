@@ -2,11 +2,11 @@ from collections import OrderedDict
 
 if __name__ == "__main__":
 
-    path = "../data/results/epistaticInteraction/NID/2/epistaticInteractions_NID_epistatic_risk_model_MAF03_eta01_theta1_EDM-1_08_run0.txt"
-    save_path = "../data/results/epistaticInteraction/NID/2/epistaticInteractions_NID_epistatic_risk_model_MAF03_eta01_theta1_EDM-1_08_run0_SUM.txt"
+    path = "../data/results/epistaticInteraction/NID/2/epistaticInteractions_NID_SNPS_SBP_AVG_no_van_removed_run0.txt"
+    save_path = "../data/results/epistaticInteraction/NID/2/epistaticInteractions_NID_SNPS_SBP_AVG_no_van_removed_run0.txt_SUM.txt"
 
     #simulated data
-    interactions = {}
+    '''interactions = {}
     with open(path, "r") as interFile:
         lines = interFile.readlines()
         for line in lines:
@@ -29,11 +29,11 @@ if __name__ == "__main__":
             snp2 = pair[1]
             score = interactions[pair]
             if snp1 != snp2:
-                saveFile.write(snp1 + "\t" + snp2 + "\t" + str(score) + "\n")
+                saveFile.write(snp1 + "\t" + snp2 + "\t" + str(score) + "\n")'''
 
     #for real data
 
-    '''interactions = OrderedDict()
+    interactions = OrderedDict()
     with open(path, "r") as interFile:
         lines = interFile.readlines()
         for line in lines:
@@ -53,5 +53,5 @@ if __name__ == "__main__":
             gene2 = pair[3]
             score = interactions[pair]
             if snp1 != snp2:
-                saveFile.write(snp1 + "\t" + snp2 + "\t" + gene1 + "\t" + gene2 + "\t" + str(score) + "\n")'''
+                saveFile.write(snp1 + "\t" + snp2 + "\t" + gene1 + "\t" + gene2 + "\t" + str(score) + "\n")
         

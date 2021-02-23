@@ -13,9 +13,9 @@ from os import listdir
 from os.path import isfile, join
 
 
-DATASET_TYPE = "additive"
-DATASET_DIR_PATH = "../data/largeFiles/datasets/synthetic/" + DATASET_TYPE + "/additive_risk_model_MAF01_eta01_theta05_EDM-1/"
-TEXT_DIR_PATH = "../data/largeFiles/datasets/text/synthetic/" + DATASET_TYPE + "/"
+DATASET_TYPE = "threshold"
+DATASET_DIR_PATH = "../data/largeFiles/datasets/GAMETES/" + DATASET_TYPE + "/threshold_risk_model_MAF01_eta01_theta1_2KSNPs_EDM-1/"
+TEXT_DIR_PATH = "../data/largeFiles/datasets/text/GAMETES/" + DATASET_TYPE + "/"
 
 
 

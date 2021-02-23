@@ -6,28 +6,37 @@ from tqdm import tqdm
 from snpReader import snpRead
 
 #SBP data
-'''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_SBP_recoded12.csv"
-IND_SBP = "..\\data\\largeFiles\\SBP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_SBP_AVG.txt"
-SNP_FILE = "..\\data\\allChrom_SBP.bim"'''
+'''IND_GENO_PATH_SQ = "../data/largeFiles/allChrom_SBP_recoded12.csv"
+IND_SBP = "../data/largeFiles/SBP_2_measures.csv" 
+TEXT_PATH = "../data/largeFiles/datasets/text/BP/SNPS_SBP_AVG.txt"
+SNP_FILE = "../data/snp_lists/allChrom_SBP.bim"'''
+
+#SBP data no van removed (264)
+IND_GENO_PATH_SQ = "../data/largeFiles/allChrom_SBP_recoded12.csv"
+IND_SBP = "../data/largeFiles/SBP_2_measures.csv" 
+TEXT_PATH = "../data/largeFiles/datasets/text/BP/SNPS_SBP_AVG_no_van_removed.txt"
+SNP_FILE = "../data/snp_lists/allChrom_SBP_no_van_removed.bim"
 
 #DBP data
-'''IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_DBP_recoded12.csv"
-IND_SBP = "..\\data\\largeFiles\\DBP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_DBP_AVG.txt"
-SNP_FILE = "..\\data\\allChrom_DBP.bim"'''
+'''IND_GENO_PATH_SQ = "../data/largeFiles/allChrom_DBP_recoded12.csv"
+IND_SBP = "../data/largeFiles/DBP_2_measures.csv" 
+TEXT_PATH = "../data/largeFiles/datasets/text/BP/SNPS_DBP_AVG.txt"
+SNP_FILE = "../data/snp_lists/allChrom_DBP.bim"'''
 
 #PP data
-IND_GENO_PATH_SQ = "..\\data\\largeFiles\\allChrom_PP_recoded12.csv"
-IND_SBP = "..\\data\\largeFiles\\PP_2_measures.csv" 
-TEXT_PATH = "..\\data\\largeFiles\\datasets\\text\\BP\\SNPS_PP_AVG.txt"
-SNP_FILE = "..\\data\\allChrom_PP.bim"
+'''IND_GENO_PATH_SQ = "../data/largeFiles/allChrom_PP_recoded12.csv"
+IND_SBP = "../data/largeFiles/PP_2_measures.csv" 
+TEXT_PATH = "../data/largeFiles/datasets/text/BP/SNPS_PP_AVG.txt"
+SNP_FILE = "../data/snp_lists/allChrom_PP.bim"'''
 
 
 if __name__ == "__main__":
 
     
     genoType = {}
+
+    remove4 = True
+    to_remove = [16*2-1, 24*2-1, 136*2-1, 186*2-1]
     
     print("Loading individuals genotypes...")
     with open(IND_GENO_PATH_SQ, mode='r') as csv_file:
@@ -37,6 +46,9 @@ if __name__ == "__main__":
             genoVector = []
             dim = len(row)
             for i in range(1,dim-1, 2):
+                if remove4 and i in to_remove:
+                    continue
+
                 if row[i] == "1" and row[i+1] == "2":
                     genoVector += [1]
                 elif row[i] == row[i+1] == "1":
@@ -48,6 +60,7 @@ if __name__ == "__main__":
             genoType[indID] = genoVector
 
     print(genoType["1000018"])
+    print(len(genoType["1000018"]))
 
     completeDataset= {}
     print("Generating full dataset with genotype, phenotypes and BP values...")
@@ -71,6 +84,7 @@ if __name__ == "__main__":
                 completeDataset[indID] = [genoVec, [float(elem) for elem in phenoVec], float(sbpValue)]
     
     print(completeDataset["1596781"])
+    print(len(completeDataset))
 
     for ind in completeDataset:
         print(completeDataset[ind][0])
@@ -78,6 +92,7 @@ if __name__ == "__main__":
     
     print("Reading snps...")
     sbpSNPs = snpRead(SNP_FILE)
+    print(len(sbpSNPs))
 
     
     print("Dataset dict generated. Saving as text...")

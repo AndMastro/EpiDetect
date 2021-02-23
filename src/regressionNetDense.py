@@ -13,14 +13,14 @@ from tensorflow import keras
 from tensorflow.keras import layers
 
 PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/BP/"
-DATASET_NAME = "SNPS_PP_AVG"
+DATASET_NAME = "SNPS_SBP_AVG_no_van_removed"
 PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME + ".p"
 
 dataset = {}
 EPOCHS = 40
 LEARNING_RATE = 1e-4
 BATCH_SIZE = 16
-INPUT_SIZE = 849  # 804 SBP, 1026 DBP, 849 PP
+INPUT_SIZE = 264*3  # 264*3 SBP_no_van_removed 804 SBP, 1026 DBP, 849 PP
 numLayers = "2"
 
 '''class regressionNet(tf.keras.Model):
@@ -138,13 +138,13 @@ if __name__ == "__main__":
     save = True
 
     if save:
-        np.save('..\\data\\weights\\BP\\layer_0_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+        np.save('../data/weights/BP/layer_0_weights_' + DATASET_NAME + '_numLayers' + numLayers,
                 weightsLayer0, allow_pickle=True, fix_imports=True)
-        np.save('..\\data\\weights\\BP\\layer_1_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+        np.save('../data/weights/BP/layer_1_weights_' + DATASET_NAME + '_numLayers' + numLayers,
                 weightsLayer1, allow_pickle=True, fix_imports=True)
-        np.save('..\\data\\weights\\BP\\layer_2_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+        np.save('../data/weights/BP/layer_2_weights_' + DATASET_NAME + '_numLayers' + numLayers,
                 weightsLayer2, allow_pickle=True, fix_imports=True)
-        np.save('..\\data\\weights\\BP\\layer_3_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+        np.save('../data/weights/BP/layer_3_weights_' + DATASET_NAME + '_numLayers' + numLayers,
                 weightsLayer3, allow_pickle=True, fix_imports=True)
 
         print("Weights saved")

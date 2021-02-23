@@ -3,11 +3,11 @@ import sys
 from tqdm import tqdm 
 
 if __name__ == "__main__":
-    BP = "PP"
-    PATH = "../data/results/epistaticInteraction/BOOST/BP/old_format/InteractionRecords_" + BP + ".txt"
-    SAVE_PATH = "../data/results/epistaticInteraction/BOOST/BP/proper_format/epistaticInteractions_BOOST_pairwise_" + BP + ".txt"
+    BP = "SBP"
+    PATH = "../data/results/epistaticInteraction/BOOST/BP/old_format/InteractionRecords_" + BP + "_no_van_removed.txt"
+    SAVE_PATH = "../data/results/epistaticInteraction/BOOST/BP/proper_format/epistaticInteractions_BOOST_pairwise_" + BP + "_no_van_removed.txt"
 
-    snpDict = sbpSNPs = snpRead("../data/allChrom_" + BP +".bim")
+    snpDict = sbpSNPs = snpRead("../data/snp_lists/allChrom_" + BP +"_no_van_removed.bim")
     
     snpToGene = geneRead("../data/snp_gene_mappings/snpsToGene_" + BP +"_ensembl_manual.txt",
                              "../data/snp_gene_mappings/notMapped_" + BP +"_ensembl_closest.txt")
