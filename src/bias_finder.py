@@ -1,7 +1,7 @@
 import sys
 
 top_n = 1000
-TRAIT = "SBP"
+TRAIT = "PP"
 #BOOST
 
 METHOD  = "BOOST"
@@ -108,7 +108,7 @@ MDR_top = [elem[0] for elem in snps]
 
 METHOD  = "NID"
 
-PATH = "../data/results/epistaticInteraction/"+ METHOD +"/BP/proper_format/epistaticInteractions_"+ METHOD +"_"+TRAIT+ ".txt"
+PATH = "../data/results/epistaticInteraction/"+ METHOD +"/BP/proper_format/epistaticInteractions_"+ METHOD +"_"+TRAIT+ "_SUM_ordered.txt"
 
 
 #NID

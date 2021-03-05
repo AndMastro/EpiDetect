@@ -4,11 +4,11 @@ from tqdm import tqdm
 
 #this file converst the ME output of BOOST into a version in which we can see the SNP rsID and the gene name (and not the index)
 if __name__ == "__main__":
-    BP = "PP"
-    PATH = "../data/results/epistaticInteraction/BOOST/BP/old_format/MarginalAssoc_" + BP + ".txt"
-    SAVE_PATH = "../data/results/epistaticInteraction/BOOST/BP/proper_format/marginal_effect_BOOST_" + BP + ".txt"
+    BP = "SBP"
+    PATH = "../data/results/epistaticInteraction/BOOST/BP/old_format/MarginalAssoc_" + BP + "_no_van_removed.txt"
+    SAVE_PATH = "../data/results/epistaticInteraction/BOOST/BP/proper_format/marginal_effect_BOOST_" + BP + "_no_van_removed.txt"
 
-    snpDict = sbpSNPs = snpRead("../data/snp_lists/allChrom_" + BP +".bim")
+    snpDict = sbpSNPs = snpRead("../data/snp_lists/allChrom_" + BP +"_no_van_removed.bim")
     
     snpToGene = geneRead("../data/snp_gene_mappings/snpsToGene_" + BP +"_ensembl_manual.txt",
                              "../data/snp_gene_mappings/notMapped_" + BP +"_ensembl_closest.txt")

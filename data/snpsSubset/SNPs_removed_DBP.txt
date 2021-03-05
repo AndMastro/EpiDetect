@@ -1,0 +1,8 @@
+rs59986178	11:77359909
+rs12583637	13:50564490
+rs12938803	17:19204432
+
+non multi allelic but not found by PLINK (not in imputations files probably)
+rs75305034	3:133886705
+
+

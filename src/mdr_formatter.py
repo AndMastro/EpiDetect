@@ -6,9 +6,9 @@ if __name__ == "__main__":
 
     realData = sys.argv[1]
 
-    BP = "PP"
-    PATH = "../data/results/epistaticInteraction/MDR/BP/" + BP + "_AVG_analysis_MDR.txt"
-    SAVE_PATH = "../data/results/epistaticInteraction/MDR/"+ BP + "_AVG_MDR_genes_rank_top1000.txt"
+    BP = "SBP"
+    PATH = "../data/results/epistaticInteraction/MDR/BP/" + BP + "_AVG_analysis_MDR_no_van_removed.txt"
+    SAVE_PATH = "../data/results/epistaticInteraction/MDR/"+ BP + "_AVG_MDR_genes_rank_top1000_no_van_removed.txt"
 
     if realData == "true":
     

@@ -1,9 +1,9 @@
 from collections import OrderedDict
-
+import sys
 if __name__ == "__main__":
 
-    path = "../data/results/epistaticInteraction/NID/2/epistaticInteractions_NID_SNPS_SBP_AVG_no_van_removed_run0.txt"
-    save_path = "../data/results/epistaticInteraction/NID/2/epistaticInteractions_NID_SNPS_SBP_AVG_no_van_removed_run0.txt_SUM.txt"
+    path = "../data/results/epistaticInteraction/NID/BP/old_formats/epistaticInteractions_NID_SNPS_SBP_AVG_run0.txt"
+    save_path = "../data/results/epistaticInteraction/NID/BP/proper_format/epistaticInteractions_NID_SBP_SUM_ordered.txt"
 
     #simulated data
     '''interactions = {}
@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     #for real data
 
-    interactions = OrderedDict()
+    interactions = {}
     with open(path, "r") as interFile:
         lines = interFile.readlines()
         for line in lines:
@@ -44,6 +44,9 @@ if __name__ == "__main__":
                 interactions[snpPair] = float(score)
             else:
                 interactions[snpPair] += float(score)
+    
+    interactions = dict(sorted(interactions.items(), reverse = True, key=lambda item: item[1]))
+    
     
     with open(save_path, "w+") as saveFile:
         for pair in interactions:
