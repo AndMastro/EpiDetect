@@ -1,25 +1,21 @@
 import numpy as np
-import tempfile
 import os
 from itertools import combinations
-import itertools as IT
 from snpReader import snpRead
 from snpReader import geneRead
 from sklearn.metrics import pairwise
-import statistics
 import sys
-import math
-from operator import add
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-INPUT_SIZE = 264*3 #2000*3 #256*3  # 256*3  804 SBP, 1026 DBP, 849 PP
-DATASET_NAME = "SNPS_SBP_AVG_no_van_removed"
-DATASET_TYPE = "SBP" 
-#DATASET_NAME = "threshold_risk_model_MAF01_eta01_theta1_2KSNPs_EDM-1_01"  #used only with GAMETES data
+INPUT_SIZE =  256*3 #2000*3 #256*3  # 264*3  804 SBP, 1026 DBP, 849 PP
+# DATASET_NAME = "SNPS_SBP_AVG_no_van_removed"
+# DATASET_TYPE = "SBP"
+DATASET_TYPE = "marginal_effect" 
+DATASET_NAME = "epistatic_plus_ME_risk_model_MAF01_eta01_theta1_lambda1_2_EDM-1_01"  #used only with GAMETES data
 if __name__ == "__main__":
 
-    trueData = True  # variable stating if using true or generated data
+    trueData = False  # variable stating if using true or generated data by GAMETES
 
     # if u wanna save on file
     save = False
@@ -38,18 +34,18 @@ if __name__ == "__main__":
     sbpSNPs = None
 
     layerWeights0 = np.load(
-        '../data/weights/BP/layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/GAMETES/' + DATASET_TYPE + '/layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights1 = np.load(
-        '../data/weights/BP/layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/GAMETES/' + DATASET_TYPE + '/layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights2 = np.load(
-        '../data/weights/BP/layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/GAMETES/' + DATASET_TYPE + '/layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights3 = np.load(
-        '../data/weights/BP/layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/GAMETES/' + DATASET_TYPE + '/layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
 
     print("Loading SNPs database...")
-
+    
     sbpSNPs = snpRead(
-        "../data/snp_lists/allChrom_SBP_no_van_removed.bim")
+        "../data/snp_lists/snpList256_3SNP.bim") #allChrom_SBP_no_van_removed
 
     snpToGene = None
 

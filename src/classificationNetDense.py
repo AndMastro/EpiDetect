@@ -1,23 +1,21 @@
 from __future__ import absolute_import, division, print_function
 
-import pathlib
 import pickle
 import matplotlib.pyplot as plt
 import pandas as pd
 import random
 import sys
-#import seaborn as sns
 import numpy as np
 import tensorflow as tf
+import tensorflow.keras
 from tensorflow import keras
 from tensorflow.keras import layers
 from tqdm import tqdm
-from sklearn import preprocessing
-from sklearn.utils import class_weight
-from sklearn.model_selection import train_test_split
 
-PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/GAMETES/"
-DATASET_NAME = "threshold_risk_model_MAF01_eta01_theta1_2KSNPs_20KINDs_EDM-1_1" #1 is MAF=0.2 and 2 is MAF=0.5 ---- it should make sense now. Prevalence should reflect #controls. Am I right?
+
+DATASET_TYPE = "marginal_effect"
+PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/GAMETES/" + DATASET_TYPE + "/"
+DATASET_NAME = "epistatic_plus_ME_risk_model_MAF01_eta01_theta1_lambda1_2_EDM-1_01" #1 is MAF=0.2 and 2 is MAF=0.5 ---- it should make sense now. Prevalence should reflect #controls. Am I right?
 PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME + ".p"
 ###RENDER DATASET INPUTABLE. IT should be more modular###
 
@@ -28,7 +26,7 @@ dataset = {}
 EPOCHS = 30
 LEARNING_RATE = 1e-4
 BATCH_SIZE = 64
-INPUT_SIZE = 2000*3 #256*3
+INPUT_SIZE = 256*3 #2000*3 256*3
 numLayers = sys.argv[1]
 
 
@@ -64,7 +62,7 @@ def build_model():
         print("Command not recognized. Aborting...")
         sys.exit()
 
-    optimizer = tf.keras.optimizers.Adam(lr=LEARNING_RATE)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE)
     #optimizer = tf.keras.optimizers.Adam()
     #optimizer = tf.keras.optimizers.SGD()
 
@@ -171,7 +169,7 @@ if __name__ == "__main__":
 
     # define early stopping callback
     es = keras.callbacks.EarlyStopping(
-        monitor='val_acc', mode='max', verbose=1, patience=5)
+        monitor='val_accuracy', mode='max', verbose=1, patience=5, restore_best_weights=True) #val-accuracy or val_loss? USe acc up to know, so be coherent. Frot he future, loss
 
     # set class weights in order to work with unbalanced data. We keep thus statistical power
     '''print("Computing class weigth to work with unbalanced data...")
@@ -212,26 +210,26 @@ if __name__ == "__main__":
 
     if save:
         if numLayers == '4':
-            np.save('..\\data\\weights\\GAMETES\\layer_0_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
+            np.save('../data/weights/GAMETES/' + DATASET_TYPE + '/layer_0_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
                     weightsLayer0, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\GAMETES\\layer_1_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
+            np.save('../data/weights/GAMETES/' + DATASET_TYPE + '/layer_1_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
                     weightsLayer1, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\GAMETES\\layer_2_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
+            np.save('../data/weights/GAMETES/' + DATASET_TYPE + '/layer_2_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
                     weightsLayer2, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\GAMETES\\layer_3_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
+            np.save('../data/weights/GAMETES/' + DATASET_TYPE + '/layer_3_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
                     weightsLayer3, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\GAMETES\\layer_4_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
+            np.save('../data/weights/GAMETES/' + DATASET_TYPE + '/layer_4_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
                     weightsLayer4, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\GAMETES\\layer_5_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
+            np.save('../data/weights/GAMETES/' + DATASET_TYPE + '/layer_5_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
                     weightsLayer5, allow_pickle=True, fix_imports=True)
         else:
-            np.save('..\\data\\weights\\GAMETES\\layer_0_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
+            np.save('../data/weights/GAMETES/' + DATASET_TYPE + '/layer_0_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
                     weightsLayer0, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\GAMETES\\layer_1_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
+            np.save('../data/weights/GAMETES/' + DATASET_TYPE + '/layer_1_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
                     weightsLayer1, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\GAMETES\\layer_2_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
+            np.save('../data/weights/GAMETES/' + DATASET_TYPE + '/layer_2_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
                     weightsLayer2, allow_pickle=True, fix_imports=True)
-            np.save('..\\data\\weights\\GAMETES\\layer_3_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
+            np.save('../data/weights/GAMETES/' + DATASET_TYPE + '/layer_3_weights_'+ DATASET_NAME + '_numLayers' + numLayers,
                     weightsLayer3, allow_pickle=True, fix_imports=True)
 
         print("Weights saved")

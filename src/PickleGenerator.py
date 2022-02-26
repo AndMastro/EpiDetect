@@ -13,9 +13,9 @@ from os import listdir
 from os.path import isfile, join
 
 
-
-DATASET_DIR_PATH = "../data/largeFiles/datasets/GAMETES/threshold/threshold_risk_model_MAF01_eta01_theta1_2KSNPs_20KINDS_EDM-1/"
-PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/GAMETES/"
+DATASET_TYPE = "marginal_effect"
+DATASET_DIR_PATH = "../data/largeFiles/datasets/GAMETES/"+ DATASET_TYPE + "/epistatic_plus_ME_risk_model_MAF01_eta01_theta1_lambda1_2_EDM-1/"
+PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/GAMETES/" + DATASET_TYPE + "/"
 
 
 
