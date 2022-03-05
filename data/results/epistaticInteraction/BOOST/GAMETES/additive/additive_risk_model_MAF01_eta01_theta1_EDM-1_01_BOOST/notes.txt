@@ -1,0 +1,14 @@
+here interactions are properly found. Where is the bias towards high margnal effets?
+Here the fact is that snps with marginal effects are also the ones iteracting, the other snps not not have
+any marginal effect on the trait. If we inspect the ME results, we see that those two SNPs have high
+marginal effects, that biases the output.
+So we only see the interacting pair sincee the marginal of the snp pair with a hgih ranked one is null (so in the
+regression formula this contributios is alsost nullified).
+so it cannot be seen as an interacton, oppositely of what happens with real BP data, in which
+two snps with a consistent marginal effect are sometimes misclassified as two interacting snps, which is 
+not said to be true.
+Moreover,, we are in a case/cntrole set, for which boost was designed. BP is a regression problem, and
+we are froce to make an appoximation when using BOOST. epiCID is for both regression and classification problems.
+
+TO SUM UP:
+Marginal effects in BOOST bias the results: two SNPs with high marginal effect are seen as interacting (not always true)

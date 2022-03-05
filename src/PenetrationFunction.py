@@ -4,7 +4,7 @@ import sys
 eta = 0.1
 theta = 1
 constant = int(sys.argv[1])
-lam = 0.1
+lam = 0.3
 ME = sys.argv[2]
 ME_effect_size = 2 #1 with Cc and 2 with CC. we add it to what is multiplied by eta
 ME_effect = 1 + ME_effect_size*lam

@@ -12,7 +12,7 @@ INPUT_SIZE =  256*3 #2000*3 #256*3  # 264*3  804 SBP, 1026 DBP, 849 PP
 # DATASET_NAME = "SNPS_SBP_AVG_no_van_removed"
 # DATASET_TYPE = "SBP"
 DATASET_TYPE = "marginal_effect" 
-DATASET_NAME = "epistatic_plus_ME_risk_model_MAF01_eta01_theta1_lambda1_2_EDM-1_01"  #used only with GAMETES data
+DATASET_NAME = "epistatic_plus_ME_risk_model_MAF01_eta01_theta1_lambda03_1_2_EDM-1_01"  #used only with GAMETES data
 if __name__ == "__main__":
 
     trueData = False  # variable stating if using true or generated data by GAMETES

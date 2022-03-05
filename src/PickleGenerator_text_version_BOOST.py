@@ -14,7 +14,7 @@ from os.path import isfile, join
 
 
 DATASET_TYPE = "marginal_effect"
-DATASET_DIR_PATH = "../data/largeFiles/datasets/GAMETES/" + DATASET_TYPE + "/epistatic_plus_ME_risk_model_MAF01_eta01_theta1_lambda1_2_EDM-1/"
+DATASET_DIR_PATH = "../data/largeFiles/datasets/GAMETES/" + DATASET_TYPE + "/epistatic_plus_ME_risk_model_MAF01_eta01_theta1_lambda03_1_2_EDM-1/"
 TEXT_DIR_PATH = "../data/largeFiles/datasets/text/GAMETES/" + DATASET_TYPE + "/"
 
 

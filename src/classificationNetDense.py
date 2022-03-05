@@ -15,7 +15,7 @@ from tqdm import tqdm
 
 DATASET_TYPE = "marginal_effect"
 PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/GAMETES/" + DATASET_TYPE + "/"
-DATASET_NAME = "epistatic_plus_ME_risk_model_MAF01_eta01_theta1_lambda1_2_EDM-1_01" #1 is MAF=0.2 and 2 is MAF=0.5 ---- it should make sense now. Prevalence should reflect #controls. Am I right?
+DATASET_NAME = "epistatic_plus_ME_risk_model_MAF01_eta01_theta1_lambda03_1_2_EDM-1_01" #1 is MAF=0.2 and 2 is MAF=0.5 ---- it should make sense now. Prevalence should reflect #controls. Am I right?
 PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME + ".p"
 ###RENDER DATASET INPUTABLE. IT should be more modular###
 
