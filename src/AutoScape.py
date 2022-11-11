@@ -33,7 +33,7 @@ if __name__ == "__main__":
     G = nx.Graph(name = DATA_FILE)
     G.add_edges_from(edges)
 
-    print(nx.info(G))
+    print((G))
 
     if centrality == "degree":
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
         central_G.add_edges_from(central_edges)
 
-        print(nx.info(central_G))
+        print((central_G))
         
         SAVE_PATH = None
         if top:
