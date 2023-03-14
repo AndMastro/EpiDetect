@@ -6,7 +6,7 @@ df_interactions = pd.DataFrame(columns= ["Method", "SNP RANK", "# interactions"]
 
 #####BOOST######
 df_interactions.loc[0] = ["BOOST", 1, 226]
-df_interactions.loc[2] = ["BOOST", 2, 180]
+df_interactions.loc[1] = ["BOOST", 2, 180]
 df_interactions.loc[2] = ["BOOST", 3, 157]
 df_interactions.loc[3] = ["BOOST", 4, 130]
 df_interactions.loc[4] = ["BOOST", 5, 89]
@@ -35,7 +35,7 @@ df_interactions.loc[19] = ["EpiCID", 5, 72]
 
 
 sns.barplot(x = df_interactions["SNP RANK"], y=df_interactions["# interactions"], hue = df_interactions["Method"])
-plt.savefig("interactions_distribution.png")
+plt.savefig("interactions_distribution_300dpi.png", dpi=300)
 
 # sns.kdeplot(x = df_interactions["SNP RANK"], y=df_interactions["# interactions"], hue = df_interactions["Method"])
 # plt.savefig("interactions_distribution_kde.png")
