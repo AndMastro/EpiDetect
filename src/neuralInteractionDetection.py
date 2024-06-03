@@ -7,12 +7,13 @@ from sklearn.metrics import roc_auc_score
 import sys
 from tqdm import tqdm
 import os
+import time
 
 #INPUT_SIZE = 849  # 256*3  804 SBP, 1026 DBP, 849 PP
 #DATASET_NAME = "SNPS_PP_AVG"
-INPUT_SIZE = 264*3 #2000*3 #256*3  # 256*3  804 SBP, 1026 DBP, 849 PP
-DATASET_TYPE = "SBP"
-DATASET_NAME = "SNPS_SBP_AVG_no_van_removed"
+INPUT_SIZE = 849 #264*3 #2000*3 #256*3  # 256*3  804 SBP, 1026 DBP, 849 PP
+DATASET_TYPE = "PP"
+DATASET_NAME = "SNPS_PP_AVG"
 if __name__ == "__main__":
 
     trueData = True  # variable stating if using true or generated data
@@ -45,7 +46,7 @@ if __name__ == "__main__":
     print("Loading SNPs database...")
 
     sbpSNPs = snpRead(
-        "../data/snp_lists/allChrom_SBP_no_van_removed.bim")
+        "../data/snp_lists/allChrom_PP.bim")
 
     snpToGene = None
 
@@ -63,6 +64,7 @@ if __name__ == "__main__":
     output = layerWeights3[0]
     print("===========================")
 
+    start = time.time()
     # print(output)
 
     # Define weights vectors according to NID paper
@@ -126,10 +128,12 @@ if __name__ == "__main__":
 
     # print((potentialInteractions))
     # print(len(potentialInteractions))
-
+    print("There are " + str(len(potentialInteractions)) +
+          " potential interactions.")
+    
     print("Inizializing interaction dictionary.")
     interactions = {}
-
+    
     for pair in potentialInteractions:
         interactions[pair] = []
 
@@ -148,6 +152,7 @@ if __name__ == "__main__":
     # sort pairs according to interaction strenght
     intRank = sorted(((v, k) for k, v in interactions.items()), reverse=True)
 
+    end = time.time()
     interactingSNPs = []
 
     if trueData:
@@ -162,36 +167,39 @@ if __name__ == "__main__":
         '''print(interactingSNPs[0:100])
         print(max(interactions.values()))
         print(min(interactions.values()))'''
+    print("Time elapsed for NID: " + str(end-start))
+    print("========================================================================")
 
-    counter = 0
-    fileName = "../data/results/epistaticInteraction/NID/" + \
-        str(interactionWay) + \
-        "/epistaticInteractions_NID_" + DATASET_NAME + "_run{}.txt"
-    while os.path.isfile(fileName.format(counter)):
-        counter += 1
-    fileName = fileName.format(counter)
-    intFile = open(fileName, "w+")
-    # intFile100 = open("../data/results/epistaticInteraction/268_SBP/prove/epistaticInteractions_268_200Units_NID_TOP_100_ONLYGENES.txt", "w+")
+    if save == True:
+        counter = 0
+        fileName = "../data/results/epistaticInteraction/NID/" + \
+            str(interactionWay) + \
+            "/thesis_11_10_23/epistaticInteractions_NID_" + DATASET_NAME + "_run{}.txt"
+        while os.path.isfile(fileName.format(counter)):
+            counter += 1
+        fileName = fileName.format(counter)
+        intFile = open(fileName, "w+")
+        # intFile100 = open("../data/results/epistaticInteraction/268_SBP/prove/epistaticInteractions_268_200Units_NID_TOP_100_ONLYGENES.txt", "w+")
 
-    # done in order to remove SNPs not related to genes (only kept for training since they intervene in SBP regulation but cannot raise epistatic phenomenon)
-    if trueData:
-        for pair in interactingSNPs:
+        # done in order to remove SNPs not related to genes (only kept for training since they intervene in SBP regulation but cannot raise epistatic phenomenon)
+        if trueData:
+            for pair in interactingSNPs:
 
+                    snp1 = str(pair[1][0])
+                    snp2 = str(pair[1][1])
+                    gene1 = str(pair[2][0])
+                    gene2 = str(pair[2][1])
+                    score = str(pair[0])
+
+                    intFile.write(
+                        snp1 + "\t" + snp2 + "\t" + gene1 + "\t" + gene2 + "\t" + score + "\n")
+        else:
+            for pair in interactingSNPs:
                 snp1 = str(pair[1][0])
                 snp2 = str(pair[1][1])
-                gene1 = str(pair[2][0])
-                gene2 = str(pair[2][1])
                 score = str(pair[0])
+                intFile.write(snp1 + "\t" + snp2 + "\t" + score + "\n")                    
 
-                intFile.write(
-                    snp1 + "\t" + snp2 + "\t" + gene1 + "\t" + gene2 + "\t" + score + "\n")
-    else:
-        for pair in interactingSNPs:
-            snp1 = str(pair[1][0])
-            snp2 = str(pair[1][1])
-            score = str(pair[0])
-            intFile.write(snp1 + "\t" + snp2 + "\t" + score + "\n")                    
-
-    print("File with interactions saved.")
+        print("File with interactions saved.")
 
     sys.exit()

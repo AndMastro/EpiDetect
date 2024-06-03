@@ -7,15 +7,16 @@ from sklearn.metrics import pairwise
 import sys
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+import time
 
-INPUT_SIZE =  256*3 #2000*3 #256*3  # 264*3  804 SBP, 1026 DBP, 849 PP
-# DATASET_NAME = "SNPS_SBP_AVG_no_van_removed"
-# DATASET_TYPE = "SBP"
-DATASET_TYPE = "marginal_effect" 
-DATASET_NAME = "epistatic_plus_ME_risk_model_MAF01_eta01_theta1_lambda03_1_2_EDM-1_01"  #used only with GAMETES data
+INPUT_SIZE =  849 #264*3 #2000*3 #256*3  # 264*3  804 SBP, 1026 DBP, 849 PP
+DATASET_NAME = "SNPS_PP_AVG"
+DATASET_TYPE =  "PP"
+# DATASET_TYPE = "marginal_effect" 
+# DATASET_NAME = "epistatic_plus_ME_risk_model_MAF01_eta01_theta1_lambda03_1_2_EDM-1_01"  #used only with GAMETES data
 if __name__ == "__main__":
 
-    trueData = False  # variable stating if using true or generated data by GAMETES
+    trueData = True  # variable stating if using true or generated data by GAMETES
 
     # if u wanna save on file
     save = False
@@ -33,19 +34,20 @@ if __name__ == "__main__":
     layerWeights3 = None
     sbpSNPs = None
 
+    
     layerWeights0 = np.load(
-        '../data/weights/GAMETES/' + DATASET_TYPE + '/layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/BP/layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights1 = np.load(
-        '../data/weights/GAMETES/' + DATASET_TYPE + '/layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/BP/layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights2 = np.load(
-        '../data/weights/GAMETES/' + DATASET_TYPE + '/layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/BP/layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights3 = np.load(
-        '../data/weights/GAMETES/' + DATASET_TYPE + '/layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../data/weights/BP/layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
 
     print("Loading SNPs database...")
     
     sbpSNPs = snpRead(
-        "../data/snp_lists/snpList256_3SNP.bim") #allChrom_SBP_no_van_removed
+        "../data/snp_lists/allChrom_PP.bim") #allChrom_SBP_no_van_removed
 
     snpToGene = None
 
@@ -59,6 +61,8 @@ if __name__ == "__main__":
 
     print("Done!")
     print("===========================")
+    
+    start = time.time()
 
     # Define weights vectors NOT according to NID paper
     # NOT LIKE THAT: we need all the weights for all the input variables for any unit. So we need a matrix such thta we have a vector of 153 elems for any of the 64 hidden units
@@ -103,8 +107,8 @@ if __name__ == "__main__":
     snpsDict = {}
     scalingFactor11 = 0.5
     scalingFactor12 = 1
-    scalingFactor22 = 2 #biological prior to weigh more the heterozigosity for minor allele (more rare). Can be removed, no big changes in results.
-    for i in range(0, len(dense1Weights), 3):
+    scalingFactor22 = 1 #2 #biological prior to weight more the heterozigosity for minor allele (more rare). Can be removed, no big changes in results.
+    for i in tqdm(range(0, len(dense1Weights), 3)):
         # uncomment accroding to if you want NFV sum OR concatenation
         neuralFeatureVectorProxy1 = np.multiply(
             dense1Weights[i], aggregateWeightsD1)
@@ -117,27 +121,27 @@ if __name__ == "__main__":
         neuralFeatureVector = np.add(
             neuralFeatureVectorProxy1, neuralFeatureVectorProxy2)
         neuralFeatureVector = np.add(
-            neuralFeatureVector, neuralFeatureVectorProxy3*scalingFactor22)
+            neuralFeatureVector, neuralFeatureVectorProxy3) #*scalingFactor22
 
         # uncomment this line to have NFV concatenation
-        #neuralFeatureVector = np.concatenate((neuralFeatureVectorProxy1, neuralFeatureVectorProxy2, neuralFeatureVectorProxy3*scalingFactor22))
+        #neuralFeatureVector = np.concatenate((neuralFeatureVectorProxy1, neuralFeatureVectorProxy2, neuralFeatureVectorProxy3))
 
         # uncomment this to have max
         #neuralFeatureVector = []
         '''for i in range (0,len(neuralFeatureVectorProxy1)):
-            neuralFeatureVector.append(max(neuralFeatureVectorProxy1[i],neuralFeatureVectorProxy2[i],neuralFeatureVectorProxy3[i]*scalingFactor22))
+            neuralFeatureVector.append(max(neuralFeatureVectorProxy1[i],neuralFeatureVectorProxy2[i],neuralFeatureVectorProxy3[i]))
         minVector = []'''
 
         # for min
         '''neuralFeatureVector = []
         for i in range (0,len(neuralFeatureVectorProxy1)):
-            neuralFeatureVector.append(min(neuralFeatureVectorProxy1[i],neuralFeatureVectorProxy2[i],neuralFeatureVectorProxy3[i]*scalingFactor22))
+            neuralFeatureVector.append(min(neuralFeatureVectorProxy1[i],neuralFeatureVectorProxy2[i],neuralFeatureVectorProxy3[i]))
         minVector = []'''
 
         # for avg
         '''neuralFeatureVector = []
         for i in range (0,len(neuralFeatureVectorProxy1)):
-            neuralFeatureVector.append(np.mean(np.array((neuralFeatureVectorProxy1[i],neuralFeatureVectorProxy2[i],neuralFeatureVectorProxy3[i]*scalingFactor22))))
+            neuralFeatureVector.append(np.mean(np.array((neuralFeatureVectorProxy1[i],neuralFeatureVectorProxy2[i],neuralFeatureVectorProxy3[i]))))
         minVector = []'''
 
         minVector = []
@@ -145,7 +149,7 @@ if __name__ == "__main__":
 
         if concat:
             minVector = np.concatenate(
-                (dense1Weights[i], dense1Weights[i+1], dense1Weights[i+2]*scalingFactor22))
+                (dense1Weights[i], dense1Weights[i+1], dense1Weights[i+2]))
         else:
             for j in range(len(dense1Weights[i])):
                 # uncomment the desired aggregation method
@@ -157,7 +161,7 @@ if __name__ == "__main__":
                 #minVector.append(min(dense1Weights[i][j], dense1Weights[i+1][j], dense1Weights[i+2][j]))
 
                 # MAX
-                #minVector.append(max(dense1Weights[i][j], dense1Weights[i+1][j], dense1Weights[i+2][j]*scalingFactor22))
+                #minVector.append(max(dense1Weights[i][j], dense1Weights[i+1][j], dense1Weights[i+2][j]))
 
                 # SUM
                 minVector.append(
@@ -171,7 +175,7 @@ if __name__ == "__main__":
 
     numInputs = list(np.arange(int(INPUT_SIZE/3)))
 
-    print("Inizializing interaction dictionary...")
+    print("Initializing interaction dictionary...")
     potentialInteractions = list(combinations(numInputs, interactionWay))
 
     print("There are " + str(len(potentialInteractions)) +
@@ -289,7 +293,7 @@ if __name__ == "__main__":
     intRank = sorted(((v, k) for k, v in interactions.items()), reverse=True)
 
     #------------------------#
-
+    end = time.time()
     interactingSNPs = []
 
     if trueData:
@@ -324,18 +328,19 @@ if __name__ == "__main__":
                                                    [0], snpsDict[group[1][2]][0], snpsDict[group[1][3]][0])))  # add genes
 
     # and now, analyze
-
+    print("Time elapsed for EpiCID: " + str(end-start))
+    print("========================================================================")
     if save == True:
         counter = 0
         fileName = None
         if trueData:
             fileName = "../data/results/epistaticInteraction/EpiCID/BP/" + \
                 str("proper_format") + \
-                "/epistaticInteractions_thesisMethodandMinVecSum_" + DATASET_NAME + "_run{}.txt"
+                "/thesis_11_10_2023/epistaticInteractions_EpiCID_" + DATASET_NAME + "_run{}.txt"
         else:
             fileName = "../data/results/epistaticInteraction/EpiCID/GAMETES/" + \
                 str(DATASET_TYPE) + \
-                "/epistaticInteractions_EpiCID_" + DATASET_NAME + "_run{}.txt"
+                "/thesis_11_10_2023/epistaticInteractions_EpiCID_" + DATASET_NAME + "_run{}.txt"
         while os.path.isfile(fileName.format(counter)):
             counter += 1
         fileName = fileName.format(counter)
@@ -365,10 +370,11 @@ if __name__ == "__main__":
         print("File with interactions saved.")
 
     else:
-        for pair in interactingSNPs[0:100]:
-            if "None" not in pair[2]:
-                print(str(pair[1]) + " " + str(pair[2]) +
-                      " " + str(pair[0]) + "\n")
+        # for pair in interactingSNPs[0:100]:
+        #     if "None" not in pair[2]:
+        #         print(str(pair[1]) + " " + str(pair[2]) +
+        #               " " + str(pair[0]) + "\n")
+        pass
 
     sys.exit()
 

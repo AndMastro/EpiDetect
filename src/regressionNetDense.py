@@ -9,18 +9,19 @@ import sys
 #import seaborn as sns
 import numpy as np
 import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras import layers
+# from tensorflow import keras
+from tensorflow.keras import layers, Sequential, callbacks
+import time
 
 PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/BP/"
-DATASET_NAME = "SNPS_SBP_AVG_no_van_removed"
+DATASET_NAME = "SNPS_SBP_AVG"
 PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME + ".p"
 
 dataset = {}
 EPOCHS = 40
 LEARNING_RATE = 1e-4
 BATCH_SIZE = 16
-INPUT_SIZE = 264*3  # 264*3 SBP_no_van_removed 804 SBP, 1026 DBP, 849 PP
+INPUT_SIZE = 849  # 264*3 SBP_no_van_removed 804 SBP, 1026 DBP, 849 PP
 numLayers = "2"
 
 '''class regressionNet(tf.keras.Model):
@@ -42,7 +43,7 @@ numLayers = "2"
 
 def build_model():
 
-    model = keras.Sequential([
+    model = Sequential([
         layers.Dense(200, activation=tf.nn.relu, input_shape=[
                      INPUT_SIZE]),  # 200 units #64
         layers.Dense(50, activation=tf.nn.relu),  # 100 units #32
@@ -51,7 +52,7 @@ def build_model():
         layers.Dense(1)
     ])
 
-    optimizer = tf.keras.optimizers.Adam(lr=LEARNING_RATE)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE)
 
     model.compile(loss='mean_squared_error',  # alternate square and absolute
                   optimizer=optimizer,
@@ -120,13 +121,15 @@ if __name__ == "__main__":
     # print(trainY)
 
     # define early stopping callback
-    es = keras.callbacks.EarlyStopping(
-        monitor='val_loss', mode='min', verbose=1, patience=5)
+    es = callbacks.EarlyStopping(
+        monitor='val_loss', mode='min', verbose=1, patience=5, restore_best_weights=True)
 
+    start = time.time()
     history = model.fit(
         X_train, Y_train,
         epochs=EPOCHS, validation_split=0.3, shuffle=True, verbose=1, batch_size=BATCH_SIZE)
 
+    end = time.time()
     #plot_history(history)
 
     weightsLayer0 = model.layers[0].get_weights()
@@ -135,18 +138,19 @@ if __name__ == "__main__":
     weightsLayer3 = model.layers[3].get_weights()
 
 
-    save = True
+    save = False
 
-    if save:
-        np.save('../data/weights/BP/layer_0_weights_' + DATASET_NAME + '_numLayers' + numLayers,
-                weightsLayer0, allow_pickle=True, fix_imports=True)
-        np.save('../data/weights/BP/layer_1_weights_' + DATASET_NAME + '_numLayers' + numLayers,
-                weightsLayer1, allow_pickle=True, fix_imports=True)
-        np.save('../data/weights/BP/layer_2_weights_' + DATASET_NAME + '_numLayers' + numLayers,
-                weightsLayer2, allow_pickle=True, fix_imports=True)
-        np.save('../data/weights/BP/layer_3_weights_' + DATASET_NAME + '_numLayers' + numLayers,
-                weightsLayer3, allow_pickle=True, fix_imports=True)
+    # if save:
+    #     np.save('../data/weights/BP/thesis_11_10_23/layer_0_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+    #             weightsLayer0, allow_pickle=True, fix_imports=True)
+    #     np.save('../data/weights/BP/thesis_11_10_23/layer_1_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+    #             weightsLayer1, allow_pickle=True, fix_imports=True)
+    #     np.save('../data/weights/BP/thesis_11_10_23/layer_2_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+    #             weightsLayer2, allow_pickle=True, fix_imports=True)
+    #     np.save('../data/weights/BP/thesis_11_10_23/layer_3_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+    #             weightsLayer3, allow_pickle=True, fix_imports=True)
 
-        print("Weights saved")
+    #     print("Weights saved")
 
     print("Done.")
+    print("Time elapsed for neural network training: ", end - start)
