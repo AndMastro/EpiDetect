@@ -1,4 +1,4 @@
-# Explainable Deep Learning for Network Analysis of Epistatic Interactions
+# A Novel Explainable Deep-Learning Approach For Network Analysis of Epistatic Interaction
 Detection of SNP-SNP epistasis via neural network models interpretation. This is the official repository of the work "A Novel Deep Learning Approach For Network Analysis of Epistatic Interactions".
 
 This repository contains the implementation of the EpiCID algorithm for explainability and of the centrality analysis framework of EpiDetect.
