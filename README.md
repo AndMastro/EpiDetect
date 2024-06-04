@@ -17,3 +17,5 @@ By running the script ```epistaticCosineInteractionDetectionSNPAggregationMutliW
 
 Using the script ```AutoScape.py``` it is possible run centrality analysis on epistatic network obtained with the previous step. In the paper it was run on the top-1000 interactions.
 
+### Enrichment analysis
+After having obtained the central genes, use [Enrichr](https://maayanlab.cloud/Enrichr/) to perform enrichment analysis.
