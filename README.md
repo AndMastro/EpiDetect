@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="docs/epidetect_logo.svg" alt="EpiDetect logo" width=30%>
+</p>
+
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)
+
 # A Novel Explainable Deep-Learning Approach For Network Analysis of Epistatic Interaction
 Detection of SNP-SNP epistasis via neural network models interpretation. This is the official repository of the work "A Novel Deep Learning Approach For Network Analysis of Epistatic Interactions".
 
