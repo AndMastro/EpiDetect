@@ -87,16 +87,6 @@ if __name__ == "__main__":
             for gene in central_genes:
                 saveFile.write(gene + "\t" + str(deg_dict[gene]) + "\n")
         
-
-        '''deg_list = sorted(list(G.degree()), reverse = True, key = lambda x:x[1])
-
-        central_deg_list = []
-
-        for gene in deg_list:
-            if gene[0] in genes_list:
-                central_deg_list.append(gene)
-                
-        print(sorted(central_deg_list, reverse = True, key = lambda x:x[1]))'''
         
     else:
         centrality_measure = None
@@ -130,7 +120,7 @@ if __name__ == "__main__":
             print("\nNetwork average distance (avg shortest path): " + str(distance))
             sys.exit()
         
-        elif centrality == "radiality": #slighly differnet values from Centiscape (raking is the same). Difference is probably due to apporx. Check on documentation later
+        elif centrality == "radiality": 
             diameter = nx.diameter(G)
             nodes = G.nodes()
             numNodes = G.number_of_nodes()
@@ -144,7 +134,7 @@ if __name__ == "__main__":
             
             avg_centrality = sum(centrality_measure.values())/numNodes
         
-        elif centrality == "stress": # DIFFERNET VALUES FROM CENTISCAPE! WHY? TO CHECK. First ranked genes are the same, tho.
+        elif centrality == "stress": 
 
             all_paths = dict(nx.all_pairs_shortest_path(G))
             nodes = G.nodes()
@@ -195,7 +185,7 @@ if __name__ == "__main__":
 
             
 
-        elif centrality == "bridging": #VALUES AND RAKING COMPLETELY DIFFERENT FROM CENTISCAPE.
+        elif centrality == "bridging": 
             
             centrality_measure = {}
 
@@ -207,8 +197,7 @@ if __name__ == "__main__":
 
             for gene in nodes:
                 deg_gene = G.degree(gene)
-                neighbours = G.neighbors(gene) #it returns an iterator! Once iterated, your are done (can your reset it?).
-                #print(list(neighbors))
+                neighbours = G.neighbors(gene) 
                 deg_neig = []
                 sigmas = []
                 neighbours_list = []
@@ -216,7 +205,7 @@ if __name__ == "__main__":
                     neighbours_list.append(n)
                     deg_neig.append(G.degree(n))
 
-                #print(neighbours_list)
+                
                 
                 for n in neighbours_list:
                     edges_outgoing_neigborhood = 0
@@ -224,10 +213,10 @@ if __name__ == "__main__":
                     
                     for n_n in neigh_n:
                         if n_n != gene and n_n not in neighbours_list:
-                            edges_outgoing_neigborhood +=1 #we count the nodes, not edges but it is the same computation
+                            edges_outgoing_neigborhood +=1 #we count the nodes, not edges 
                     sigmas.append(edges_outgoing_neigborhood)
 
-                #print(sigmas)
+                
                    
                 SIGMA = []
                 for sig, d in zip(sigmas, deg_neig):
@@ -238,17 +227,17 @@ if __name__ == "__main__":
 
                 BC[gene] = (1/deg_gene) * sum(SIGMA)
 
-                #sys.exit()
+               
 
             for gene in nodes:
                 centrality_measure[gene] = btw[gene]*BC[gene]
-            #print(centrality_measure["KDF1"])
+            
 
 
             avg_centrality = sum(centrality_measure.values())/G.number_of_nodes()
             
 
-        elif centrality == "edge_betweenness": #values are different from Centiscape but the ranking is the same
+        elif centrality == "edge_betweenness": 
 
             centrality_measure = nx.edge_betweenness_centrality(G, normalized = False)
             avg_centrality = sum(centrality_measure.values())/G.number_of_edges()
@@ -348,4 +337,3 @@ if __name__ == "__main__":
                 saveFile.write(gene + "\t" + str(centrality_measure[gene]) + "\n")
 
         
-    # To add: take in input interaction file and centrality measure to use. Then, return a file with central genes: GENE_NAME DEG_ORIGINAL DEG_CENTRAL_NETWORK + avg degree in both networks (may be useful). To that for now, then, decide if consider edge weight.
