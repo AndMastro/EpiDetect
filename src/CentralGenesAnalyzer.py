@@ -10,7 +10,7 @@ if __name__ == "__main__":
     central_genes = []
 
     if arg_len < 3:
-        print("ERROR: not enough arguments. Specify itneraction file and centrality measures folder")
+        print("ERROR: not enough arguments. Specify interaction file and centrality measures folder")
         sys.exit()
 
     LIST_FILE = sys.argv[2]
