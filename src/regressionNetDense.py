@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import random
 import sys
-#import seaborn as sns
+
 import numpy as np
 import tensorflow as tf
-# from tensorflow import keras
+
 from tensorflow.keras import layers, Sequential, callbacks
 import time
 
-PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/BP/"
+PICKLE_DIR_PATH = "../data/largeFiles/datasets/pickles/BP/" #data not present in repo since not public
 DATASET_NAME = "SNPS_SBP_AVG"
 PICKLE_PATH = PICKLE_DIR_PATH + DATASET_NAME + ".p"
 
@@ -21,32 +21,17 @@ dataset = {}
 EPOCHS = 40
 LEARNING_RATE = 1e-4
 BATCH_SIZE = 16
-INPUT_SIZE = 849  # 264*3 SBP_no_van_removed 804 SBP, 1026 DBP, 849 PP
+INPUT_SIZE = 849  # 264*3 SBP 804 SBP, 1026 DBP, 849 PP
 numLayers = "2"
-
-'''class regressionNet(tf.keras.Model):
-
-    def __init__(self):
-        super(regressionNet, self).__init__()
-
-        self.dense1 = tf.layers.Dense(64, activation=tf.nn.relu)
-        self.dense2 = tf.layers.Dense(64, activation=tf.nn.relu)
-
-        #self.dropout = tf.layers.Dropout(0.3) 
-        self.dense3 = tf.layers.Dense(1)  
-
-    def call(self, x, training=False):
-        x = self.dense1(tf.reshape(x, [x.shape[0], -1]))
-        x = self.dense2(x)
-        return self.dense3(x)'''
+save = False
 
 
 def build_model():
 
     model = Sequential([
         layers.Dense(200, activation=tf.nn.relu, input_shape=[
-                     INPUT_SIZE]),  # 200 units #64
-        layers.Dense(50, activation=tf.nn.relu),  # 100 units #32
+                     INPUT_SIZE]),  
+        layers.Dense(50, activation=tf.nn.relu),  
         #layers.Dense(1, activation=tf.nn.relu),
         layers.Dropout(0.3, noise_shape=None, seed=None),
         layers.Dense(1)
@@ -54,7 +39,7 @@ def build_model():
 
     optimizer = tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE)
 
-    model.compile(loss='mean_squared_error',  # alternate square and absolute
+    model.compile(loss='mean_squared_error',  
                   optimizer=optimizer,
                   metrics=['mean_absolute_error', 'mean_squared_error'])
     return model
@@ -100,9 +85,9 @@ if __name__ == "__main__":
     for ind in dataset:
         xGeno = dataset[ind][0]
         if isinstance(xGeno, list):
-            #xList = [x / 6400 for x in dataset[ind][0]]
+            
             xList = xGeno
-            #xList = dataset[ind][0] + [dataset[ind][1]]
+            
             trainX.append(xList)
             trainY.append(dataset[ind][2])
 
@@ -115,12 +100,7 @@ if __name__ == "__main__":
     X_train = np.array(trainX)
     Y_train = np.array(trainY)
 
-    #X_train = np.reshape(X_train, (X_train.shape[0], -1))
-
-    # print(trainX)
-    # print(trainY)
-
-    # define early stopping callback
+    
     es = callbacks.EarlyStopping(
         monitor='val_loss', mode='min', verbose=1, patience=5, restore_best_weights=True)
 
@@ -138,19 +118,19 @@ if __name__ == "__main__":
     weightsLayer3 = model.layers[3].get_weights()
 
 
-    save = False
+    
 
-    # if save:
-    #     np.save('../data/weights/BP/thesis_11_10_23/layer_0_weights_' + DATASET_NAME + '_numLayers' + numLayers,
-    #             weightsLayer0, allow_pickle=True, fix_imports=True)
-    #     np.save('../data/weights/BP/thesis_11_10_23/layer_1_weights_' + DATASET_NAME + '_numLayers' + numLayers,
-    #             weightsLayer1, allow_pickle=True, fix_imports=True)
-    #     np.save('../data/weights/BP/thesis_11_10_23/layer_2_weights_' + DATASET_NAME + '_numLayers' + numLayers,
-    #             weightsLayer2, allow_pickle=True, fix_imports=True)
-    #     np.save('../data/weights/BP/thesis_11_10_23/layer_3_weights_' + DATASET_NAME + '_numLayers' + numLayers,
-    #             weightsLayer3, allow_pickle=True, fix_imports=True)
+    if save:
+        np.save('../data/weights/BP/layer_0_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+                weightsLayer0, allow_pickle=True, fix_imports=True)
+        np.save('../data/weights/BP/layer_1_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+                weightsLayer1, allow_pickle=True, fix_imports=True)
+        np.save('../data/weights/BP/layer_2_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+                weightsLayer2, allow_pickle=True, fix_imports=True)
+        np.save('../data/weights/BP/layer_3_weights_' + DATASET_NAME + '_numLayers' + numLayers,
+                weightsLayer3, allow_pickle=True, fix_imports=True)
 
-    #     print("Weights saved")
+        print("Weights saved")
 
     print("Done.")
     print("Time elapsed for neural network training: ", end - start)
