@@ -2,7 +2,7 @@
   <img src="docs/epidetect_logo.svg" alt="EpiDetect logo" width=30%>
 </p>
 
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white) [![DOI](https://zenodo.org/badge/241056998.svg)](https://zenodo.org/doi/10.5281/zenodo.13152208)
 
 # A Novel Explainable Deep-Learning Approach For Network Analysis of Epistatic Interaction
 Detection of SNP-SNP epistasis via neural network models interpretation. This is the official repository of the work "A Novel Deep-Learning Approach For Network Analysis of Epistatic Interactions".
