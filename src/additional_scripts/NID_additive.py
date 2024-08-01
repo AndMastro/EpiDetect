@@ -2,8 +2,8 @@ from collections import OrderedDict
 import sys
 if __name__ == "__main__":
 
-    path = "../data/results/epistaticInteraction/NID/BP/old_formats/thesis_11_10_23/epistaticInteractions_NID_SNPS_SBP_AVG_no_van_removed.txt"
-    save_path = "../data/results/epistaticInteraction/NID/BP/proper_format/thesis_11_10_2023/epistaticInteractions_NID_SBP_SUM_ordered.txt"
+    path = "../../data/results/epistaticInteraction/NID/BP/old_formats/epistaticInteractions_NID_SNPS_SBP_AVG_no_van_removed.txt"
+    save_path = "../../data/results/epistaticInteraction/NID/BP/proper_format/epistaticInteractions_NID_SBP_SUM_ordered.txt"
 
     #simulated data
     '''interactions = {}
@@ -31,7 +31,7 @@ if __name__ == "__main__":
             if snp1 != snp2:
                 saveFile.write(snp1 + "\t" + snp2 + "\t" + str(score) + "\n")'''
 
-    #for real data
+    #real data
 
     interactions = {}
     with open(path, "r") as interFile:

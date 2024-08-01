@@ -33,24 +33,24 @@ if __name__ == "__main__":
     sbpSNPs = None
 
     layerWeights0 = np.load(
-        '../data/weights/BP/layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../../data/weights/BP/layer_0_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights1 = np.load(
-        '../data/weights/BP/layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../../data/weights/BP/layer_1_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights2 = np.load(
-        '../data/weights/BP/layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../../data/weights/BP/layer_2_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
     layerWeights3 = np.load(
-        '../data/weights/BP/layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
+        '../../data/weights/BP/layer_3_weights_' + DATASET_NAME + '_numLayers2.npy', allow_pickle=True)
 
     print("Loading SNPs database...")
 
     sbpSNPs = snpRead(
-        "../data/snp_lists/allChrom_PP.bim")
+        "../../data/snp_lists/allChrom_PP.bim")
 
     snpToGene = None
 
     if trueData == True:
-        snpToGene = geneRead("../data/snp_gene_mappings/snpsToGene_" + DATASET_TYPE + "_ensembl_manual.txt",
-                             "../data/snp_gene_mappings/notMapped_" + DATASET_TYPE + "_ensembl_closest.txt")
+        snpToGene = geneRead("../../data/snp_gene_mappings/snpsToGene_" + DATASET_TYPE + "_ensembl_manual.txt",
+                             "../../data/snp_gene_mappings/notMapped_" + DATASET_TYPE + "_ensembl_closest.txt")
 
     '''print(layerWeights0)
     print(layerWeights1)
@@ -153,7 +153,7 @@ if __name__ == "__main__":
 
     if save == True:
         counter = 0
-        fileName = "../data/results/epistaticInteraction/NID/" + \
+        fileName = "../../data/results/epistaticInteraction/NID/" + \
             str(interactionWay) + \
             "/epistaticInteractions_NID_" + DATASET_NAME + "_run{}.txt"
         while os.path.isfile(fileName.format(counter)):

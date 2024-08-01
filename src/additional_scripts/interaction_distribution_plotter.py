@@ -95,12 +95,10 @@ df_interactions.loc[19] = ["EpiCID", 5, 59]
 
 
 sns.barplot(x = df_interactions["SNP rank"], y=df_interactions["Number of interactions"], hue = df_interactions["Method"])
-plt.savefig("../data/results/epistaticInteraction/comparison_plots/" + TRAIT + "/interactions_distribution_thesis_28_10_2023.pdf", dpi=300)
-plt.savefig("../data/results/epistaticInteraction/comparison_plots/" + TRAIT + "/interactions_distribution_thesis_28_10_2023.eps", dpi=300)
-plt.savefig("../data/results/epistaticInteraction/comparison_plots/" + TRAIT + "/interactions_distribution_thesis_28_10_2023.png", dpi=300)
+plt.savefig("../../data/results/epistaticInteraction/comparison_plots/" + TRAIT + "/interactions_distribution.pdf", dpi=300)
+plt.savefig("../../data/results/epistaticInteraction/comparison_plots/" + TRAIT + "/interactions_distribution.eps", dpi=300)
+plt.savefig("../../data/results/epistaticInteraction/comparison_plots/" + TRAIT + "/interactions_distribution.png", dpi=300)
 
-# sns.kdeplot(x = df_interactions["SNP RANK"], y=df_interactions["# interactions"], hue = df_interactions["Method"])
-# plt.savefig("interactions_distribution_kde.png")
 
 
 print(df_interactions)
