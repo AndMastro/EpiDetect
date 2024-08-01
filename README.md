@@ -20,9 +20,9 @@ The repo contains the scrit ```regressionNetDense.py``` that can be used to trai
 By running 
 
 ```bash
-python epistaticCosineInteractionDetection.py true 2
+python epistaticCosineInteractionDetection.py save 2
 ```
-it is possbile to explain the model and determine interacting input features (SNPs). The script will load the NN weights and apply the EpiCID algorithm, generating a file with interacting pairs of SNPs. In the repo you will find pre-computed weights, obtained from the models we used in the paper. ```save``` indicates we want to save the results on file, and ```2``` is the order of interaction to compute (pairwise interaction as in our experiments).
+it is possbile to explain the model and determine interacting input features (SNPs). The script will load the NN weights and apply the EpiCID algorithm, generating a file with interacting pairs of SNPs if ```save``` is passed as argument. In the repo you will find pre-computed weights, obtained from the models we used in the paper. ```2``` is the order of interaction to compute (pairwise interaction as in our experiments).
 
 ### Centrality analysis
 
