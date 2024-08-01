@@ -17,11 +17,16 @@ The repo contains the scrit ```regressionNetDense.py``` that can be used to trai
 
 ### Model explainability
 
-By running the script ```epistaticCosineInteractionDetectionSNPAggregationMutliWay.py``` it is possbile to explain the model and determine interacting input features (SNPs). The script will load the NN weights and apply the EpiCID algorithm, generating a file with interacting pairs of SNPs. In the repo you will find pre-computed weights, obtained from the models we used in the paper.
+By running 
+
+```bash
+python epistaticCosineInteractionDetection.py true 2
+```
+it is possbile to explain the model and determine interacting input features (SNPs). The script will load the NN weights and apply the EpiCID algorithm, generating a file with interacting pairs of SNPs. In the repo you will find pre-computed weights, obtained from the models we used in the paper. ```save``` indicates we want to save the results on file, and ```2``` is the order of interaction to compute (pairwise interaction as in our experiments).
 
 ### Centrality analysis
 
-Using the script ```AutoScape.py``` it is possible run centrality analysis on epistatic network obtained with the previous step. In the paper it was run on the top-1000 interactions. The script ```CentralGenesAnalyzer.py``` preforms analysis and statistics on the central genes.
+Using the script ```AutoScape.py``` it is possible run centrality analysis on epistatic network obtained with the previous step. In the paper it was run on the top-1000 interactions. The script ```CentralGenesAnalyzer.py``` performs analysis and computes statistics on the central genes.
 
 ### Enrichment analysis
 After having obtained the central genes, use [Enrichr](https://maayanlab.cloud/Enrichr/) to perform enrichment analysis.
