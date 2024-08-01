@@ -35,7 +35,7 @@ if __name__ == "__main__":
         
         central_genes.append(g_list)
 
-    #print(central_genes)
+    
     DATA_FILE = sys.argv[1]
 
     edges = []
@@ -62,7 +62,7 @@ if __name__ == "__main__":
         top_genes[gene] = count
     
     avg_count = sum(list(top_genes.values()))/len(top_genes)
-    #print(top_genes)
+    
     top_gene_names = list(top_genes.keys())
     top_genes_scores = list(top_genes.values())
 
@@ -76,4 +76,4 @@ if __name__ == "__main__":
                 saveFile.write(gene +"\t" + str(top_genes[gene]) + "\n")
 
 
-        #print(nx.info(G))
+        
