@@ -287,14 +287,14 @@ if __name__ == "__main__":
         if interactionWay == 2:
             for pair in intRank:
                 interactingSNPs.append((pair[0], (snpsDict[pair[1][0]][0], snpsDict[pair[1][1]][0]), (
-                    snpToGene[snpsDict[pair[1][0]][0]], snpToGene[snpsDict[pair[1][1]][0]])))  # add genes
+                    snpToGene[snpsDict[pair[1][0]][0]], snpToGene[snpsDict[pair[1][1]][0]])))  
 
-        if interactionWay == 3:  # render more general for > 2
+        if interactionWay == 3:  
             for group in intRank:
                 interactingSNPs.append((group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]][0], snpsDict[group[1][2]][0]), (
-                    snpToGene[snpsDict[group[1][0]][0]], snpToGene[snpsDict[group[1][1]][0]], snpToGene[snpsDict[group[1][2]][0]])))  # add genes
+                    snpToGene[snpsDict[group[1][0]][0]], snpToGene[snpsDict[group[1][1]][0]], snpToGene[snpsDict[group[1][2]][0]])))  
 
-        if interactionWay == 4:  # render more general for > 2
+        if interactionWay == 4:  
             for group in intRank:
                 interactingSNPs.append((group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]][0], snpsDict[group[1][2]][0], snpsDict[group[1][3]][0]), (
                     snpToGene[snpsDict[group[1][0]][0]], snpToGene[snpsDict[group[1][1]][0]], snpToGene[snpsDict[group[1][2]][0]], snpToGene[snpsDict[group[1][3]][0]])))
@@ -302,17 +302,17 @@ if __name__ == "__main__":
         if interactionWay == 2:
             for pair in intRank:
                 interactingSNPs.append(
-                    (pair[0], (snpsDict[pair[1][0]][0], snpsDict[pair[1][1]][0])))  # add genes
+                    (pair[0], (snpsDict[pair[1][0]][0], snpsDict[pair[1][1]][0])))  
 
-        if interactionWay == 3:  # render more general for > 2
+        if interactionWay == 3:  
             for group in intRank:
                 interactingSNPs.append(
-                    (group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]][0], snpsDict[group[1][2]][0])))  # add genes
+                    (group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]][0], snpsDict[group[1][2]][0])))  
 
-        if interactionWay == 4:  # render more general for > 2
+        if interactionWay == 4:  
             for group in intRank:
                 interactingSNPs.append((group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]]
-                                                   [0], snpsDict[group[1][2]][0], snpsDict[group[1][3]][0])))  # add genes
+                                                   [0], snpsDict[group[1][2]][0], snpsDict[group[1][3]][0])))  
 
     # analyze
     print("Time elapsed for EpiCID: " + str(end-start))
