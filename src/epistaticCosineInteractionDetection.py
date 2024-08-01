@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     trueData = True  # variable stating if using true or generated data by GAMETES
 
-    # if u wanna save on file
+    # if you want save on file
     save = False
 
     if sys.argv[1] == "save":
