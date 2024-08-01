@@ -8,8 +8,7 @@ from tqdm import tqdm
 import os
 import time
 
-#INPUT_SIZE = 849  # 256*3  804 SBP, 1026 DBP, 849 PP
-#DATASET_NAME = "SNPS_PP_AVG"
+
 INPUT_SIZE = 849 #264*3 #2000*3 #256*3  # 256*3  804 SBP, 1026 DBP, 849 PP
 DATASET_TYPE = "PP"
 DATASET_NAME = "SNPS_PP_AVG"
@@ -17,7 +16,7 @@ if __name__ == "__main__":
 
     trueData = True  # variable stating if using true or generated data
 
-    # if u wanna save on file
+   
     save = False
 
     if sys.argv[1] == "save":
@@ -64,14 +63,10 @@ if __name__ == "__main__":
     print("===========================")
 
     start = time.time()
-    # print(output)
-
-    # Define weights vectors according to NID paper
-    # we need all the weights for all the input variables for any unit. So we need a matrix such thta we have a vector of 153 elems for any of the 64 hidden units
+    
 
     print("Defining vectors for interaction detection. We need absolute values")
-    # print(dense1[0])
-    # print(len(dense1[0]))
+    
 
     dense1Weights = []
     firstAppend = True
@@ -95,12 +90,7 @@ if __name__ == "__main__":
                 dense2Weights[i].append(abs(inputVec[i]))
         firstAppend = False
 
-    # print(dense1Weights[0])
-    # print(len(dense1Weights[0]))
-
-    # print(dense2Weights[0])
-    # print(len(dense2Weights[0]))
-
+   
     outputWeights = []
     for w in output:
         outputWeights.append((list(abs(w))))
@@ -109,24 +99,21 @@ if __name__ == "__main__":
 
     outputWeights = flatten(outputWeights)
 
-    # print(len(outputWeights))
+    
 
     print("Defining Aggregate Weight for any unit")
 
-    # print(len(dense2))
-    # print(len(output))
+    
 
     aggregateWeightsD1 = np.matmul(
         np.array(outputWeights), np.array(dense2Weights))
 
-    # print((aggregateWeightsD1))
-    # print(len(aggregateWeightsD1))
+   
     numInputs = list(np.arange(int(INPUT_SIZE)))
 
     potentialInteractions = list(combinations(numInputs, 2))
 
-    # print((potentialInteractions))
-    # print(len(potentialInteractions))
+    
     print("There are " + str(len(potentialInteractions)) +
           " potential interactions.")
     
@@ -136,9 +123,7 @@ if __name__ == "__main__":
     for pair in potentialInteractions:
         interactions[pair] = []
 
-    # print(interactions)
-
-    # we use here aggregate weight and int avg at 1st layer (dens1weights)
+    
     for intPair in tqdm(interactions):
         intStrength = 0
         for i in range(len(aggregateWeightsD1)):
@@ -146,9 +131,6 @@ if __name__ == "__main__":
                 min(dense1Weights[i][intPair[0]], dense1Weights[i][intPair[1]]))
         interactions[intPair] = intStrength
 
-    # print(interactions)
-
-    # sort pairs according to interaction strenght
     intRank = sorted(((v, k) for k, v in interactions.items()), reverse=True)
 
     end = time.time()
@@ -173,14 +155,12 @@ if __name__ == "__main__":
         counter = 0
         fileName = "../data/results/epistaticInteraction/NID/" + \
             str(interactionWay) + \
-            "/thesis_11_10_23/epistaticInteractions_NID_" + DATASET_NAME + "_run{}.txt"
+            "/epistaticInteractions_NID_" + DATASET_NAME + "_run{}.txt"
         while os.path.isfile(fileName.format(counter)):
             counter += 1
         fileName = fileName.format(counter)
         intFile = open(fileName, "w+")
-        # intFile100 = open("../data/results/epistaticInteraction/268_SBP/prove/epistaticInteractions_268_200Units_NID_TOP_100_ONLYGENES.txt", "w+")
-
-        # done in order to remove SNPs not related to genes (only kept for training since they intervene in SBP regulation but cannot raise epistatic phenomenon)
+        
         if trueData:
             for pair in interactingSNPs:
 
