@@ -17,7 +17,7 @@ The repo contains the scrit ```regressionNetDense.py``` that can be used to trai
 
 ### Model explainability
 
-By running the script ```epistaticCosineInteractionDetectionSNPAggregationMutliWay.py``` it is possbile to explain the model and determin interacting input features (SNPs). The script will load the NN weights and apply the EpiCID algorithm, generating a file with interacting pairs of SNPs. In the repo you will find pre-computed weights, obtained from the models we used in the paper.
+By running the script ```epistaticCosineInteractionDetectionSNPAggregationMutliWay.py``` it is possbile to explain the model and determine interacting input features (SNPs). The script will load the NN weights and apply the EpiCID algorithm, generating a file with interacting pairs of SNPs. In the repo you will find pre-computed weights, obtained from the models we used in the paper.
 
 ### Centrality analysis
 
