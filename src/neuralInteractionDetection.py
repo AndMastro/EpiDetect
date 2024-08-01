@@ -1,4 +1,3 @@
-from epistaticCosineInteractionDetectionSNPAggregationMutliWay import DATASET_TYPE
 import numpy as np
 from itertools import combinations
 from snpReader import snpRead
