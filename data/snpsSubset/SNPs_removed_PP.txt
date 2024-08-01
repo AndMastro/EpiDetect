@@ -1,3 +1,0 @@
-no multi allelic but removed by PLINK (not in imputations files probably):
-
-rs115231027	17:44199290

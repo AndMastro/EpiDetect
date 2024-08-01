@@ -1,2 +1,0 @@
-For EpiCID and NID (so to associate index to SNPs rs_ids use BIM FILES, not txt lists - wrong order)
-Remove from SBP the 4-non vangelis SNPs ONLY AFTER having created the correct pickle (w/out those SNPs)

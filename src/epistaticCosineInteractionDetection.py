@@ -47,7 +47,7 @@ if __name__ == "__main__":
     print("Loading SNPs database...")
     
     sbpSNPs = snpRead(
-        "../data/snp_lists/allChrom_PP.bim") #allChrom_SBP_no_van_removed
+        "../data/snp_lists/allChrom_PP.bim") #allChrom_SBP #allChrom_PP #allChrom_DBP
 
     snpToGene = None
 
@@ -64,15 +64,13 @@ if __name__ == "__main__":
     
     start = time.time()
 
-    # Define weights vectors NOT according to NID paper
-    # NOT LIKE THAT: we need all the weights for all the input variables for any unit. So we need a matrix such thta we have a vector of 153 elems for any of the 64 hidden units
-    #Matrix is not transposed
+    # Define weight vectors 
     print("Defining vectors for interaction detection. We need absolute values...")
 
     dense1Weights = []
     firstAppend = True
 
-    # for any input unit we have a vectyro with the weights to all the fist layer hidden units
+    # for any input unit we have a vector with the weights to all the fist layer hidden units
     for vector in dense1:
         dense1Weights.append(np.array(list(abs(vector))))
 
@@ -107,7 +105,7 @@ if __name__ == "__main__":
     snpsDict = {}
     scalingFactor11 = 0.5
     scalingFactor12 = 1
-    scalingFactor22 = 1 #2 #biological prior to weight more the heterozigosity for minor allele (more rare). Can be removed, no big changes in results.
+    scalingFactor22 = 1 
     for i in tqdm(range(0, len(dense1Weights), 3)):
         # uncomment accroding to if you want NFV sum OR concatenation
         neuralFeatureVectorProxy1 = np.multiply(
@@ -188,8 +186,6 @@ if __name__ == "__main__":
         interactions[group] = []
     print("Done.")'''
 
-    # the following lines of code are  used to study the interaction strength according to the min vec only to check how to exploit it.
-    #------------------------#
 
     print("Computing interaction strengths...")
     # interaction detection only for 2 way interaction (cosine similarity)
@@ -202,17 +198,15 @@ if __name__ == "__main__":
 
         #------------------------#
 
-        # in order to exploit FUTURE (deeper layers) chek old epistatic intreaction file from Master thesis
         for intGroup in tqdm(potentialInteractions):
             minWeightsSum = 0
             for i in range(len(snpsDict[intGroup[0]][2])):
                 minWeightsSum += min(snpsDict[intGroup[0]]
                                      [2][i], snpsDict[intGroup[1]][2][i])
 
-            # the following lines of code are  used to study the interaction strength according to the min vec only to check how to exploit it.
-            #------------------------#
+           
             minVecComputation[intGroup] = minWeightsSum
-            #------------------------#
+            
 
             # cosine simil of neural feature vecs
             '''interactions[intGroup] = pairwise.cosine_similarity(
@@ -226,24 +220,19 @@ if __name__ == "__main__":
 
         minVecComputation = {}
 
-        # uncomment of big useless computational overhead
-        '''for group in potentialInteractions:
-            minVecComputation[group] = []'''
+        
 
-        #------------------------#
-
-        # in order to exploit FUTURE (deeper layers) chek old epistatic intreaction file from Master thesis
+        
         for intGroup in tqdm(potentialInteractions):
-            # minweight sum not needed. So do not compute it.
+            
             minWeightsSum = 0
             for i in range(len(snpsDict[intGroup[0]][2])):
                 minWeightsSum += min(snpsDict[intGroup[0]]
                                      [2][i], snpsDict[intGroup[1]][2][i])
 
-            # the following lines of code are  used to study the interaction strength according to the min vec only to check how to exploit it.
-            #------------------------#
+            
             minVecComputation[intGroup] = minWeightsSum
-            #------------------------#
+            
 
             #####################################################################################################
             ######################################################################################################
@@ -256,11 +245,11 @@ if __name__ == "__main__":
             for i in range(interactionWay):
                 neuralFeatureVectors.append(snpsDict[intGroup[i]][1])
 
-            # define unit vectors as vec/norm(vec)  shape is: (columns/rows/pages/blocks/...)
+            
             unitVectors = [(vec/np.linalg.norm(vec)).reshape(1, -1)
                            for vec in neuralFeatureVectors]
 
-            # concat vectors into a matrix
+            
 
             concatMatrix = np.concatenate(unitVectors)
 
@@ -276,11 +265,9 @@ if __name__ == "__main__":
             # -1 for normalization in [0,1]
             similarity = (firstSigma**2 - 1)/(frobeniusNorm2 - 1)
 
-            # just cosine
-            #interactions[intGroup] = similarity
-            # considering also min
+            
             interactions[intGroup] = minVecComputation[intGroup]*similarity
-            #interactions[intGroup] = minVecComputation[intGroup]*pairwise.cosine_similarity((snpsDict[intGroup[0]][1]).reshape(1,-1), snpsDict[intGroup[1]][1].reshape(1,-1))
+            
 
     # sort pairs according to interaction strenght
     if interactionWay > 3:  # unfeasible on RAM. Save file and work on disk
@@ -327,7 +314,7 @@ if __name__ == "__main__":
                 interactingSNPs.append((group[0], (snpsDict[group[1][0]][0], snpsDict[group[1][1]]
                                                    [0], snpsDict[group[1][2]][0], snpsDict[group[1][3]][0])))  # add genes
 
-    # and now, analyze
+    # analyze
     print("Time elapsed for EpiCID: " + str(end-start))
     print("========================================================================")
     if save == True:
@@ -336,22 +323,19 @@ if __name__ == "__main__":
         if trueData:
             fileName = "../data/results/epistaticInteraction/EpiCID/BP/" + \
                 str("proper_format") + \
-                "/thesis_11_10_2023/epistaticInteractions_EpiCID_" + DATASET_NAME + "_run{}.txt"
+                "/epistaticInteractions_EpiCID_" + DATASET_NAME + "_run{}.txt"
         else:
             fileName = "../data/results/epistaticInteraction/EpiCID/GAMETES/" + \
                 str(DATASET_TYPE) + \
-                "/thesis_11_10_2023/epistaticInteractions_EpiCID_" + DATASET_NAME + "_run{}.txt"
+                "/epistaticInteractions_EpiCID_" + DATASET_NAME + "_run{}.txt"
         while os.path.isfile(fileName.format(counter)):
             counter += 1
         fileName = fileName.format(counter)
         intFile = open(fileName, "w+")
 
         for pair in interactingSNPs:
-            '''if trueData:
-                intFile.write(
-                    str(pair[1]) + " " + str(pair[2]) + " " + str(pair[0]) + "\n")'''
 
-            # georgios format
+            # proper format
             if trueData:
                 snp1 = str(pair[1][0])
                 snp2 = str(pair[1][1])
@@ -376,25 +360,7 @@ if __name__ == "__main__":
         #               " " + str(pair[0]) + "\n")
         pass
 
-    sys.exit()
-
-    interValues = []
-    for val in interactingSNPs:
-        interValues.append((val[0].tolist())[0][0])
-
-    plt.hist(interValues)
-
-    saveLocation = "../data/results/plots/strengthDistribution" + DATASET_NAME + ".png"
-    plt.savefig(saveLocation)
-
-    plt.show()
-
     print("Everything done.")
 
     sys.exit()
 
-    ################################################################################
-    ################################################################################
-    ##################              FILE ENDS HERE            ######################
-    ################################################################################
-    ################################################################################
